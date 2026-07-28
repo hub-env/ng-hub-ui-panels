@@ -5,6 +5,17 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.9.0] - 2026-07-28
+
+### Added
+
+- **`removeLabel` input on `<hub-panel>`** (default `'Remove panel'`) — the accessible name announced for the ✕ remove button, overridable per panel so consumers can localize it. The glyph itself stays decorative.
+
+### Fixed
+
+- **The ✕ remove control was invisible to assistive technologies and unreachable by keyboard.** It rendered as an `aria-hidden` `<span>` with a click handler, nested *inside* the tab / disclosure `<button>` — unfocusable, unannounced and inoperable without a mouse (only the undiscoverable Delete key removed a panel). It is now a real `<button type="button">` with an `aria-label`, rendered as a **sibling** of the header control through the same slot pattern `hubPanelHeadingActions` introduced: in the strip views it follows the tab button inside `.hub-panels__nav-item` and overlays the tab's reserved end padding, so it keeps its visual spot inside the tab chrome (the tab reserves `1em` + `--hub-panels-tab-gap` instead of the glyph's intrinsic width — removable tabs may measure a few pixels wider, and in `justified` / stretched-`vertical` strips the ✕ now pins to the tab's end edge rather than trailing the label); in the accordion view it renders inside `.hub-panels__accordion-actions` at the row's end, before the chevron gutter (it sat beside the heading text before — unavoidable, a sibling control cannot occupy the middle of the disclosure button). Clicking it still removes without toggling or selecting; it is disabled together with its panel. The `.hub-panels__remove-btn` class is unchanged, so the `--hub-panels-remove-btn-opacity(-hover)` overrides keep working, and the button now shows the shared focus ring (`--hub-panels-tab-focus-ring-width/-color`). Because the ✕ no longer sits inside the header control it stopped inheriting its text colour, so it now mirrors those states explicitly — tab base / hover / active (`--hub-panels-tab-color(-hover/-active)`), active pill (`--hub-panels-pill-color-active`), accordion collapsed / expanded (`--hub-panels-accordion-btn-color` / `--hub-panels-accordion-active-color`) and disabled (`--hub-panels-tab-color-disabled`). The tablist roving `tabindex` is untouched — the ✕ is a plain tab stop after its tab, never a `role="tab"`.
+- **Removing a panel through the ✕ strands keyboard focus no more.** Removal through the button (all views) now returns focus to the closest remaining header, exactly like the Delete key always did, instead of letting it fall back to `<body>`. Exposed as the public `removePanelAndRefocus(panel)` method on `PanelsComponent`, which the Delete-key handlers now share.
+
 ## [22.8.3] - 2026-07-26
 
 ### Fixed
