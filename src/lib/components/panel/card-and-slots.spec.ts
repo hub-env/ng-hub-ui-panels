@@ -198,8 +198,16 @@ describe('panels card view + content header/footer slots', () => {
 			expect(nested.textContent).toContain('nested card body');
 		});
 
-		it('still registers panels wrapped in a control-flow block of the same template', () => {
+		it('still registers panels wrapped in a control-flow block of the same template', async () => {
 			const fixture = TestBed.createComponent(EmbeddedViewPanelHost);
+			fixture.detectChanges();
+			// Timing contract: default activation (`#ensureActivePanel`) runs in the
+			// container's `afterNextRender` + `queueMicrotask` housekeeping, so the
+			// `--active` class lands one settle AFTER the first render. A zone-based
+			// TestBed (@angular/build >= 22.0.8 loads zone.js for library test
+			// targets) does not flush `afterNextRender` inside `detectChanges()`,
+			// so settle explicitly — same pattern as `settle()` in the main spec.
+			await fixture.whenStable();
 			fixture.detectChanges();
 
 			const root = fixture.nativeElement as HTMLElement;
