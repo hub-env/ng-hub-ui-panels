@@ -32,7 +32,7 @@ import type {
 import { PanelsConfig } from '../../services/panels-config.service';
 import { contentBoxWidth } from '../../utils/content-box-width';
 import { readByPath } from '../../utils/read-by-path';
-import { resolveHubAccent } from '../../utils/resolve-hub-accent';
+import { resolveHubAccent } from 'ng-hub-ui-utils';
 import type { PanelComponent } from '../panel/panel.component';
 
 interface MultipleHeaderGroup {

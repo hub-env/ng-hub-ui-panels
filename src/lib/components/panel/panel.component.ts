@@ -19,7 +19,7 @@ import {
 import { Params, Router } from '@angular/router';
 
 import { HubPanelAppearance, HubPanelVariant } from '../../models/panels.types';
-import { resolveHubAccent } from '../../utils/resolve-hub-accent';
+import { resolveHubAccent } from 'ng-hub-ui-utils';
 import { PanelsComponent } from '../panels/panels.component';
 
 /** Monotonic counter backing the auto-generated accessibility ids. */
