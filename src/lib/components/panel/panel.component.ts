@@ -160,6 +160,13 @@ export class PanelComponent implements OnDestroy {
 	readonly removable = input(false, { transform: booleanAttribute });
 
 	/**
+	 * Accessible name announced for the ✕ remove button (`removable` panels).
+	 * The visible glyph is decorative, so this label is what assistive
+	 * technologies read; override it to localize the control.
+	 */
+	readonly removeLabel = input<string>('Remove panel');
+
+	/**
 	 * URL comparison used to mark routed panels active: `'route'` compares the
 	 * path only, `'full'` also compares query params.
 	 */
@@ -385,8 +392,11 @@ export class PanelComponent implements OnDestroy {
 		this.tabset?.onAccordionKeydown(event, this);
 	}
 
-	/** Removes this panel through the accordion header's ✕ affordance. */
+	/**
+	 * Removes this panel through the accordion header's ✕ button, handing
+	 * keyboard focus to the closest remaining header afterwards.
+	 */
 	protected removeSelf(): void {
-		this.tabset?.removePanel(this);
+		this.tabset?.removePanelAndRefocus(this);
 	}
 }

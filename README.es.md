@@ -434,6 +434,7 @@ Cuando el panel activo está enrutado, el área de contenido renderiza un
 | `active` | `boolean` (model) | `false` | Estado activo/expandido bidireccional. |
 | `disabled` | `boolean` | `false` | Impide la activación. |
 | `removable` | `boolean` | `false` | Muestra una ✕ y habilita la tecla Delete. |
+| `removeLabel` | `string` | `'Remove panel'` | Nombre accesible (`aria-label`) del botón ✕; sobrescríbelo para localizarlo. |
 | `routerLink` | `string \| string[]` | `undefined` | Convierte el panel en un panel enrutado. |
 | `queryParams` | `Params` | `undefined` | Query params para `routerLink`. |
 | `pathMatch` | `'route' \| 'full'` | `'route'` | Comparación de URL para paneles enrutados. |

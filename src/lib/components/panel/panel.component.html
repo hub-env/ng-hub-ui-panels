@@ -16,17 +16,29 @@
 			} @else {
 				{{ heading() }}
 			}
-			@if (removable()) {
-				<span class="hub-panels__remove-btn" aria-hidden="true" (click)="$event.stopPropagation(); removeSelf()">&times;</span>
-			}
 		</button>
 
 		<!-- Row affordances live OUTSIDE the disclosure button: a control nested
 			 in another control is invalid and unreachable by keyboard. They stay
-			 visible while the row is collapsed, unlike `hubPanelHeader`. -->
-		@if (headingActionsRef(); as actionsTemplate) {
+			 visible while the row is collapsed, unlike `hubPanelHeader`. The ✕
+			 remove control is a real button here for the same reason — focusable,
+			 keyboard operable and labelled for assistive technologies. -->
+		@if (removable() || headingActionsRef()) {
 			<span class="hub-panels__accordion-actions">
-				<ng-container [ngTemplateOutlet]="actionsTemplate" />
+				@if (headingActionsRef(); as actionsTemplate) {
+					<ng-container [ngTemplateOutlet]="actionsTemplate" />
+				}
+				@if (removable()) {
+					<button
+						type="button"
+						class="hub-panels__remove-btn"
+						[disabled]="disabled() || tabset?.formDisabled()"
+						[attr.aria-label]="removeLabel()"
+						(click)="removeSelf()"
+					>
+						&times;
+					</button>
+				}
 			</span>
 		}
 	</h2>

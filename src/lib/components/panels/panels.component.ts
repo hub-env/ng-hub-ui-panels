@@ -352,6 +352,21 @@ export class PanelsComponent implements ControlValueAccessor {
 	}
 
 	/**
+	 * Removes a panel on behalf of the user (the ✕ button or the Delete key)
+	 * and returns keyboard focus to the closest remaining header — strip link
+	 * or accordion button — so focus never falls back to `<body>` when the
+	 * focused control disappears with its panel.
+	 */
+	removePanelAndRefocus(panel: PanelComponent): void {
+		const index = this.panels().indexOf(panel);
+		if (index === -1) {
+			return;
+		}
+		this.removePanel(panel);
+		queueMicrotask(() => this.#focusPanelAt(Math.min(index, this.panels().length - 1)));
+	}
+
+	/**
 	 * Activates a panel on behalf of the user (`tabs` / `pills` views): marks it
 	 * active, navigates when routed, and emits `panelChange`. In `multiple` mode
 	 * clicking an active panel toggles it off (the panes render side by side);
@@ -512,8 +527,7 @@ export class PanelsComponent implements ControlValueAccessor {
 			case 'Delete': {
 				const panel = this.panels()[index];
 				if (panel?.removable()) {
-					this.removePanel(panel);
-					queueMicrotask(() => this.#focusPanelAt(Math.min(index, this.panels().length - 1)));
+					this.removePanelAndRefocus(panel);
 				}
 			}
 		}
@@ -549,8 +563,7 @@ export class PanelsComponent implements ControlValueAccessor {
 			}
 			case 'Delete': {
 				if (panel.removable()) {
-					this.removePanel(panel);
-					queueMicrotask(() => this.#focusPanelAt(Math.min(index, this.panels().length - 1)));
+					this.removePanelAndRefocus(panel);
 				}
 			}
 		}

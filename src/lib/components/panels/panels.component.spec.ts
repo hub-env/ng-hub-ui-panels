@@ -180,6 +180,79 @@ describe('PanelsComponent', () => {
 		});
 	});
 
+	describe('removable ✕ button (strip)', () => {
+		function removeButtons(): HTMLButtonElement[] {
+			return Array.from(fixture.nativeElement.querySelectorAll('.hub-panels__remove-btn'));
+		}
+
+		it('renders a real, labelled button — never nested inside the tab button', async () => {
+			await settle(fixture);
+
+			const removeBtn = removeButtons()[0];
+			expect(removeBtn).toBeTruthy();
+			expect(removeBtn.tagName).toBe('BUTTON');
+			expect(removeBtn.type).toBe('button');
+			expect(removeBtn.getAttribute('aria-label')).toBe('Remove panel');
+			expect(removeBtn.hasAttribute('aria-hidden')).toBe(false);
+			// Sibling of the tab button inside the same nav item: a control nested
+			// in another control is invalid HTML and unreachable by keyboard.
+			expect(removeBtn.closest('.hub-panels__nav-link')).toBeNull();
+			expect(removeBtn.closest('.hub-panels__nav-item')).not.toBeNull();
+		});
+
+		it('removes the panel on click without selecting it', async () => {
+			await settle(fixture);
+			expect(navLinks().length).toBe(3);
+
+			removeButtons()[0].click();
+			await settle(fixture);
+
+			expect(navLinks().length).toBe(2);
+			expect(navLinks()[0].classList).toContain('hub-panels__nav-link--active');
+			// Removing never activates the removed tab: no panelChange fired.
+			expect(host.changes.length).toBe(0);
+		});
+
+		it('is focusable and activates with Enter like any native button', async () => {
+			await settle(fixture);
+
+			const removeBtn = removeButtons()[0];
+			removeBtn.focus();
+			expect(document.activeElement).toBe(removeBtn);
+
+			// A native <button> turns Enter into a click through UA behaviour that
+			// synthetic events cannot trigger: assert no handler swallows the key,
+			// then fire the click the browser would produce.
+			const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+			removeBtn.dispatchEvent(enter);
+			expect(enter.defaultPrevented).toBe(false);
+			removeBtn.click();
+			await settle(fixture);
+
+			expect(navLinks().length).toBe(2);
+		});
+
+		it('leaves the tablist roving tabindex untouched', async () => {
+			await settle(fixture);
+
+			// Roving pattern intact: only the active tab is tabbable.
+			expect(navLinks()[0].hasAttribute('tabindex')).toBe(false);
+			expect(navLinks()[1].getAttribute('tabindex')).toBe('-1');
+			expect(navLinks()[2].getAttribute('tabindex')).toBe('-1');
+			// The ✕ is not a tab and never joins the roving order.
+			expect(removeButtons()[0].hasAttribute('role')).toBe(false);
+			expect(removeButtons()[0].hasAttribute('tabindex')).toBe(false);
+		});
+
+		it('hands focus to the closest remaining header after removal', async () => {
+			await settle(fixture);
+			removeButtons()[0].click();
+			await settle(fixture);
+
+			expect(document.activeElement).toBe(navLinks().at(-1));
+		});
+	});
+
 	describe('accordion view', () => {
 		beforeEach(() => {
 			host.type = 'accordion';

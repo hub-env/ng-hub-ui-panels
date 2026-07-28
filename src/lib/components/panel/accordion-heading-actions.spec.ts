@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { PanelHeadingActionsDirective } from '../../directives/panel-heading-actions.directive';
@@ -128,6 +128,85 @@ describe('accordion heading actions', () => {
 
 		expect(button.contains(actions)).toBe(false);
 		expect(actions.querySelector('button')).not.toBeNull();
+	});
+});
+
+@Component({
+	standalone: true,
+	imports: [PanelsComponent, PanelComponent],
+	template: `
+		<hub-panels type="accordion" (panelChange)="changes = changes + 1">
+			<hub-panel heading="First" removable>Body 1</hub-panel>
+			<hub-panel heading="Second" removable removeLabel="Dismiss section">Body 2</hub-panel>
+		</hub-panels>
+	`
+})
+class RemovableAccordionHost {
+	changes = 0;
+}
+
+describe('accordion removable ✕ button', () => {
+	beforeEach(() => TestBed.configureTestingModule({ providers: [provideRouter([])] }));
+
+	function removeButtons(fixture: ComponentFixture<RemovableAccordionHost>): HTMLButtonElement[] {
+		return Array.from(fixture.nativeElement.querySelectorAll('.hub-panels__remove-btn'));
+	}
+
+	it('renders a real, labelled button in the actions slot — never inside the disclosure button', () => {
+		const fixture = TestBed.createComponent(RemovableAccordionHost);
+		fixture.detectChanges();
+
+		const [first, second] = removeButtons(fixture);
+		expect(first.tagName).toBe('BUTTON');
+		expect(first.type).toBe('button');
+		// Default label, overridable per panel for localization.
+		expect(first.getAttribute('aria-label')).toBe('Remove panel');
+		expect(second.getAttribute('aria-label')).toBe('Dismiss section');
+		expect(first.hasAttribute('aria-hidden')).toBe(false);
+		// Sibling slot, exactly like `hubPanelHeadingActions`: a button nested in
+		// the disclosure <button> would be invalid HTML and invisible to AT.
+		expect(first.closest('.hub-panels__accordion-btn')).toBeNull();
+		expect(first.closest('.hub-panels__accordion-actions')).not.toBeNull();
+		expect(first.closest('.hub-panels__accordion-header')).not.toBeNull();
+	});
+
+	it('removes the panel on click without toggling any disclosure', async () => {
+		const fixture = TestBed.createComponent(RemovableAccordionHost);
+		fixture.detectChanges();
+
+		removeButtons(fixture)[0].click();
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
+
+		const buttons = fixture.nativeElement.querySelectorAll('.hub-panels__accordion-btn');
+		expect(buttons.length).toBe(1);
+		expect(buttons[0].getAttribute('aria-expanded')).toBe('false');
+		expect(fixture.componentInstance.changes).toBe(0);
+		// Keyboard focus lands on the closest remaining header, not on <body>.
+		expect(document.activeElement).toBe(buttons[0]);
+	});
+
+	it('is focusable and activates with Enter like any native button', async () => {
+		const fixture = TestBed.createComponent(RemovableAccordionHost);
+		fixture.detectChanges();
+
+		const removeBtn = removeButtons(fixture)[0];
+		removeBtn.focus();
+		expect(document.activeElement).toBe(removeBtn);
+
+		// A native <button> turns Enter into a click through UA behaviour that
+		// synthetic events cannot trigger: assert no handler swallows the key,
+		// then fire the click the browser would produce.
+		const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+		removeBtn.dispatchEvent(enter);
+		expect(enter.defaultPrevented).toBe(false);
+		removeBtn.click();
+		fixture.detectChanges();
+		await fixture.whenStable();
+		fixture.detectChanges();
+
+		expect(fixture.nativeElement.querySelectorAll('.hub-panels__accordion-btn').length).toBe(1);
 	});
 });
 

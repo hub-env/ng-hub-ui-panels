@@ -95,6 +95,11 @@
 				background: var(--hub-panels-pill-bg-active);
 				border-color: transparent;
 			}
+
+			// The ✕ overlays the active pill's fill, so it follows its text colour.
+			.hub-panels__nav-item--active > .hub-panels__remove-btn:not(:disabled) {
+				color: var(--hub-panels-pill-color-active);
+			}
 		}
 
 		&--justified {
@@ -126,8 +131,41 @@
 	}
 
 	&__nav-item {
+		// Containing block for the overlaid ✕ remove button below.
+		position: relative;
 		display: flex;
 		flex: 0 0 auto;
+	}
+
+	// Removable tab: the ✕ is a real sibling `<button>` of the nav link (a
+	// control nested in a control is invalid HTML and invisible to keyboard and
+	// AT). The link reserves the glyph's footprint at its inline end and the ✕
+	// overlays that padding, so it keeps the old in-flow position — label · gap
+	// · ✕ — inside the tab chrome.
+	&__nav-item:has(> .hub-panels__remove-btn) > .hub-panels__nav-link {
+		padding-inline-end: calc(var(--hub-panels-tab-padding-x) + var(--hub-panels-tab-gap) + 1em);
+	}
+
+	&__nav-item > .hub-panels__remove-btn {
+		position: absolute;
+		// Above the nav link, which raises itself to `z-index: 1` while focused.
+		z-index: 2;
+		inset-block: 0;
+		inset-inline-end: var(--hub-panels-tab-padding-x);
+		margin-block: auto;
+		color: var(--hub-panels-tab-color);
+	}
+
+	// Mirror the tab's text-colour states, which the ✕ no longer inherits now
+	// that it sits beside the link rather than inside it. The `:not(:disabled)`
+	// guards keep the shared disabled tint in charge of a disabled ✕.
+	&__nav-item:hover:not(.hub-panels__nav-item--active):not(.hub-panels__nav-item--disabled)
+		> .hub-panels__remove-btn:not(:disabled) {
+		color: var(--hub-panels-tab-color-hover);
+	}
+
+	&__nav-item--active > .hub-panels__remove-btn {
+		color: var(--hub-panels-tab-color-active);
 	}
 
 	&__nav-link {
@@ -175,14 +213,42 @@
 		}
 	}
 
+	// Real `<button>` since 22.9.0 (it was an `aria-hidden` `<span>` nested in the
+	// header button): reset the UA chrome, pin the glyph to a 1em square so its
+	// footprint is predictable, and keep the tab font tokens so it renders the
+	// same beside a nav link and inside the accordion header row (an `<h2>`,
+	// whose font it must not inherit).
 	&__remove-btn {
 		display: inline-flex;
+		flex: 0 0 auto;
 		align-items: center;
+		justify-content: center;
+		width: 1em;
+		height: 1em;
+		padding: 0;
+		font-family: var(--hub-panels-tab-font-family);
+		font-size: var(--hub-panels-tab-font-size);
+		font-weight: var(--hub-panels-tab-font-weight);
 		line-height: 1;
+		color: inherit;
+		background: transparent;
+		border: 0;
+		cursor: pointer;
 		opacity: var(--hub-panels-remove-btn-opacity);
 
-		&:hover {
+		&:hover:not(:disabled) {
 			opacity: var(--hub-panels-remove-btn-opacity-hover);
+		}
+
+		&:focus-visible {
+			outline: 0;
+			opacity: var(--hub-panels-remove-btn-opacity-hover);
+			box-shadow: 0 0 0 var(--hub-panels-tab-focus-ring-width) var(--hub-panels-tab-focus-ring-color);
+		}
+
+		&:disabled {
+			color: var(--hub-panels-tab-color-disabled);
+			cursor: not-allowed;
 		}
 	}
 

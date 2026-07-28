@@ -430,6 +430,7 @@ the active panel follows the current URL (`tabs` / `pills` views only).
 | `active` | `boolean` (model) | `false` | Two-way active/expanded state. |
 | `disabled` | `boolean` | `false` | Prevents activation. |
 | `removable` | `boolean` | `false` | Shows a ✕ and enables the Delete key. |
+| `removeLabel` | `string` | `'Remove panel'` | Accessible name (`aria-label`) of the ✕ button; override to localize. |
 | `routerLink` | `string \| string[]` | `undefined` | Turns the panel into a routed panel. |
 | `queryParams` | `Params` | `undefined` | Query params for `routerLink`. |
 | `pathMatch` | `'route' \| 'full'` | `'route'` | URL comparison for routed panels. |

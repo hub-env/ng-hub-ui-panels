@@ -46,15 +46,22 @@
 										} @else {
 											{{ panel.heading() }}
 										}
-										@if (panel.removable()) {
-											<span
-												class="hub-panels__remove-btn"
-												aria-hidden="true"
-												(click)="$event.stopPropagation(); removePanel(panel)"
-												>&times;</span
-											>
-										}
 									</button>
+									<!-- Real sibling button: a control nested inside the tab
+										 button would be invalid HTML and unreachable by keyboard.
+										 It overlays the tab's reserved end padding, so the ✕ keeps
+										 its visual spot inside the tab chrome. -->
+									@if (panel.removable()) {
+										<button
+											type="button"
+											class="hub-panels__remove-btn"
+											[disabled]="panel.disabled() || formDisabled()"
+											[attr.aria-label]="panel.removeLabel()"
+											(click)="removePanelAndRefocus(panel)"
+										>
+											&times;
+										</button>
+									}
 								</li>
 							}
 						</ul>
@@ -127,15 +134,22 @@
 								} @else {
 									{{ panel.heading() }}
 								}
-								@if (panel.removable()) {
-									<span
-										class="hub-panels__remove-btn"
-										aria-hidden="true"
-										(click)="$event.stopPropagation(); removePanel(panel)"
-										>&times;</span
-									>
-								}
 							</button>
+							<!-- Real sibling button: a control nested inside the tab
+								 button would be invalid HTML and unreachable by keyboard.
+								 It overlays the tab's reserved end padding, so the ✕ keeps
+								 its visual spot inside the tab chrome. -->
+							@if (panel.removable()) {
+								<button
+									type="button"
+									class="hub-panels__remove-btn"
+									[disabled]="panel.disabled() || formDisabled()"
+									[attr.aria-label]="panel.removeLabel()"
+									(click)="removePanelAndRefocus(panel)"
+								>
+									&times;
+								</button>
+							}
 						</li>
 					}
 				</ul>

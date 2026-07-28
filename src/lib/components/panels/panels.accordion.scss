@@ -93,6 +93,17 @@
 		);
 	}
 
+	// The ✕ remove button no longer inherits the disclosure button's colour (it
+	// sits in the actions slot beside it), so mirror the button's collapsed and
+	// expanded text colours explicitly.
+	&__accordion-actions > .hub-panels__remove-btn:not(:disabled) {
+		color: var(--hub-panels-accordion-btn-color);
+	}
+
+	&__accordion-header--expanded > .hub-panels__accordion-actions > .hub-panels__remove-btn:not(:disabled) {
+		color: var(--hub-panels-accordion-active-color);
+	}
+
 	// Without actions the heading is last, so the button carries the gutter itself.
 	&__accordion-header:not(:has(> .hub-panels__accordion-actions)) > .hub-panels__accordion-btn {
 		padding-inline-end: calc(
