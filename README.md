@@ -11,11 +11,11 @@ standalone Angular components on top of Signals.
 
 ## Documentation and Live Examples
 
-This package is part of [Hub UI](https://hubui.dev/), a collection of Angular component libraries for standalone apps.
+This package is part of [Hub UI](https://hubui.dev/en/), a collection of Angular component libraries for standalone apps.
 
-- Docs: https://hubui.dev/panels/overview/
-- Live examples: https://hubui.dev/panels/examples/
-- Hub UI: https://hubui.dev/
+- Docs: https://hubui.dev/en/panels/overview/
+- Live examples: https://hubui.dev/en/panels/examples/
+- Hub UI: https://hubui.dev/en/
 
 ## 🧩 Library Family `ng-hub-ui`
 

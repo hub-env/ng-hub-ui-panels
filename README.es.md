@@ -11,11 +11,11 @@ variables CSS. Construido como componentes standalone de Angular sobre Signals.
 
 ## Documentación y ejemplos en vivo
 
-Este paquete forma parte de [Hub UI](https://hubui.dev/), una colección de bibliotecas de componentes Angular para aplicaciones standalone.
+Este paquete forma parte de [Hub UI](https://hubui.dev/en/), una colección de bibliotecas de componentes Angular para aplicaciones standalone.
 
-- Documentación: https://hubui.dev/panels/overview/
-- Ejemplos en vivo: https://hubui.dev/panels/examples/
-- Hub UI: https://hubui.dev/
+- Documentación: https://hubui.dev/en/panels/overview/
+- Ejemplos en vivo: https://hubui.dev/en/panels/examples/
+- Hub UI: https://hubui.dev/en/
 
 ## 🧩 Familia `ng-hub-ui`
 
