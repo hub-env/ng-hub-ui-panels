@@ -7,9 +7,7 @@ import type { HubTabNavItem } from './tab-nav.types';
 @Component({
 	standalone: true,
 	imports: [HubTabNavComponent],
-	template: `
-		<hub-tab-nav [items]="items" [active]="active" [appearance]="appearance" (activeChange)="onChange($event)" />
-	`
+	template: ` <hub-tab-nav [items]="items" [active]="active" [appearance]="appearance" (activeChange)="onChange($event)" /> `
 })
 class HostComponent {
 	items: HubTabNavItem[] = [

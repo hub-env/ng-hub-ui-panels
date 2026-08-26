@@ -262,7 +262,8 @@ $hub-alert-variants: primary, secondary, success, danger, warning, info, neutral
 	// neutral callout instead of an uncoloured one.
 	color: var(--hub-panels-alert-color, var(--hub-sys-text-primary, #212529));
 	background: var(--hub-panels-alert-bg, var(--hub-sys-surface-elevated, #f8f9fa));
-	border: var(--hub-ref-border-width, 1px) solid var(--hub-panels-alert-border-color, var(--hub-sys-border-color-default, #dee2e6));
+	border: var(--hub-ref-border-width, 1px) solid
+		var(--hub-panels-alert-border-color, var(--hub-sys-border-color-default, #dee2e6));
 	border-inline-start: var(--hub-panels-alert-accent-width) solid
 		var(--hub-panels-alert-accent, var(--hub-sys-border-color-default, #dee2e6));
 	border-radius: var(--hub-panels-alert-border-radius);

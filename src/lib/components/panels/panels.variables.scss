@@ -133,7 +133,10 @@
 	--hub-panels-accordion-active-bg: var(--hub-accordion-active-bg, var(--hub-panels-accent-subtle));
 	--hub-panels-accordion-icon-color: var(--hub-accordion-icon-color, var(--hub-panels-accordion-btn-color));
 	--hub-panels-accordion-icon-active-color: var(--hub-accordion-icon-active-color, var(--hub-panels-accordion-active-color));
-	--hub-panels-accordion-btn-icon-mask: var(--hub-accordion-btn-icon-mask, url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E"));
+	--hub-panels-accordion-btn-icon-mask: var(
+		--hub-accordion-btn-icon-mask,
+		url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E")
+	);
 	--hub-panels-accordion-btn-icon-width: var(--hub-accordion-btn-icon-width, 1.25rem);
 	--hub-panels-accordion-btn-icon-transform: var(--hub-accordion-btn-icon-transform, rotate(-180deg));
 	--hub-panels-accordion-btn-icon-transition: var(--hub-accordion-btn-icon-transition, transform 0.2s ease-in-out);

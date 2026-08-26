@@ -23,12 +23,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 
-import type {
-	HubPanelsTogglePosition,
-	HubPanelVariant,
-	PanelChangeEvent,
-	PanelsType
-} from '../../models/panels.types';
+import type { HubPanelsTogglePosition, HubPanelVariant, PanelChangeEvent, PanelsType } from '../../models/panels.types';
 import { PanelsConfig } from '../../services/panels-config.service';
 import { contentBoxWidth } from '../../utils/content-box-width';
 import { readByPath } from '../../utils/read-by-path';
@@ -247,9 +242,7 @@ export class PanelsComponent implements ControlValueAccessor {
 		if (!panels.length) {
 			return [];
 		}
-		const activeIndices = panels
-			.map((panel, index) => (panel.active() ? index : -1))
-			.filter((index) => index !== -1);
+		const activeIndices = panels.map((panel, index) => (panel.active() ? index : -1)).filter((index) => index !== -1);
 		if (!activeIndices.length) {
 			return [{ headers: panels }];
 		}
@@ -754,8 +747,7 @@ export class PanelsComponent implements ControlValueAccessor {
 				this.#elementRef.nativeElement.querySelectorAll<HTMLElement>(
 					'.hub-panels__multiple-layout .hub-panels__multiple-pane-host'
 				)
-			)
-				.map((host) => [host.dataset['panelId'] ?? '', host] as const)
+			).map((host) => [host.dataset['panelId'] ?? '', host] as const)
 		);
 		for (const panel of this.panels()) {
 			const panelElement = panel.elementRef.nativeElement;
@@ -770,11 +762,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	#syncMultipleBlockSizing(): void {
 		for (const blockRef of this.multipleBlocks()) {
 			const block = blockRef.nativeElement;
-			this.#renderer.removeStyle(
-				block,
-				'--hub-panels-multiple-vertical-panel-min-width',
-				RendererStyleFlags2.DashCase
-			);
+			this.#renderer.removeStyle(block, '--hub-panels-multiple-vertical-panel-min-width', RendererStyleFlags2.DashCase);
 			if (!this.vertical() || !this.allowsMultipleActive() || this.isAccordionView()) {
 				continue;
 			}

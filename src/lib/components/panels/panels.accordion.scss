@@ -88,9 +88,7 @@
 		align-items: center;
 		gap: var(--hub-panels-tab-gap);
 		// The actions are last in the row, so they carry the chevron's gutter.
-		padding-inline-end: calc(
-			var(--hub-panels-accordion-btn-padding-x) + var(--hub-panels-accordion-toggle-gutter)
-		);
+		padding-inline-end: calc(var(--hub-panels-accordion-btn-padding-x) + var(--hub-panels-accordion-toggle-gutter));
 	}
 
 	// The ✕ remove button no longer inherits the disclosure button's colour (it
@@ -106,9 +104,7 @@
 
 	// Without actions the heading is last, so the button carries the gutter itself.
 	&__accordion-header:not(:has(> .hub-panels__accordion-actions)) > .hub-panels__accordion-btn {
-		padding-inline-end: calc(
-			var(--hub-panels-accordion-btn-padding-x) + var(--hub-panels-accordion-toggle-gutter)
-		);
+		padding-inline-end: calc(var(--hub-panels-accordion-btn-padding-x) + var(--hub-panels-accordion-toggle-gutter));
 	}
 
 	&__accordion-btn {

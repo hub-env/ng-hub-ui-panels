@@ -23,19 +23,31 @@
 //
 // scss-docs-start hub-panels-theme
 @mixin hub-panels-theme(
-	$accent: null,             // --hub-panels-accent (active tab + accents)
-	$border-color: null,       // --hub-panels-border-color
-	$border-radius: null,      // --hub-panels-border-radius
-	$border-width: null,       // --hub-panels-border-width
-	$content-bg: null,         // --hub-panels-content-bg (pane surface)
-	$content-padding-x: null,  // --hub-panels-content-padding-x
-	$content-padding-y: null,  // --hub-panels-content-padding-y
-	$tab-bg-active: null,      // --hub-panels-tab-bg-active
-	$tab-color-active: null,   // --hub-panels-tab-color-active
-	$tab-font-size: null,      // --hub-panels-tab-font-size
-	$tab-padding-x: null,      // --hub-panels-tab-padding-x
-	$tab-padding-y: null,      // --hub-panels-tab-padding-y
-	$nav-gap: null             // --hub-panels-nav-gap (spacing between tabs)
+	$accent: null,
+	// --hub-panels-accent (active tab + accents)
+	$border-color: null,
+	// --hub-panels-border-color
+	$border-radius: null,
+	// --hub-panels-border-radius
+	$border-width: null,
+	// --hub-panels-border-width
+	$content-bg: null,
+	// --hub-panels-content-bg (pane surface)
+	$content-padding-x: null,
+	// --hub-panels-content-padding-x
+	$content-padding-y: null,
+	// --hub-panels-content-padding-y
+	$tab-bg-active: null,
+	// --hub-panels-tab-bg-active
+	$tab-color-active: null,
+	// --hub-panels-tab-color-active
+	$tab-font-size: null,
+	// --hub-panels-tab-font-size
+	$tab-padding-x: null,
+	// --hub-panels-tab-padding-x
+	$tab-padding-y: null,
+	// --hub-panels-tab-padding-y
+	$nav-gap: null // --hub-panels-nav-gap (spacing between tabs)
 ) {
 	@if $accent != null {
 		--hub-panels-accent: #{$accent};

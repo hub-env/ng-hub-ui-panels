@@ -37,7 +37,9 @@
 										[disabled]="panel.disabled() || formDisabled()"
 										[attr.aria-controls]="panel.id()"
 										[attr.aria-selected]="panel.active()"
-										[attr.tabindex]="panel.active() || (!activePanel() && panelIndex(panel) === 0) ? null : -1"
+										[attr.tabindex]="
+											panel.active() || (!activePanel() && panelIndex(panel) === 0) ? null : -1
+										"
 										(click)="selectPanel(panel)"
 										(keydown)="onPanelKeydown($event, panelIndex(panel))"
 									>
@@ -71,10 +73,7 @@
 					</div>
 
 					@if (group.activePanel) {
-						<div
-							class="hub-panels__content"
-							[class.hub-panels__content--pills]="type() === 'pills'"
-						>
+						<div class="hub-panels__content" [class.hub-panels__content--pills]="type() === 'pills'">
 							<div
 								#multiplePaneHost
 								class="hub-panels__multiple-pane-host"

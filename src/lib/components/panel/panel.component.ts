@@ -219,9 +219,7 @@ export class PanelComponent implements OnDestroy {
 	 * the outer one, so a descendant selector on the container would leak the outer chevron
 	 * placement into every accordion inside its panels.
 	 */
-	protected readonly toggleAtStart = computed(
-		() => this.accordionView() && this.tabset?.togglePosition() === 'start'
-	);
+	protected readonly toggleAtStart = computed(() => this.accordionView() && this.tabset?.togglePosition() === 'start');
 
 	/**
 	 * Whether this panel renders as a card: either inside a `<hub-panels

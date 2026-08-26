@@ -159,7 +159,7 @@ export class HubTabNavComponent {
 			return -1;
 		}
 		for (let step = 1; step <= count; step += 1) {
-			const candidate = ((index + direction * step) % count + count) % count;
+			const candidate = (((index + direction * step) % count) + count) % count;
 			if (!items[candidate].disabled) {
 				return candidate;
 			}

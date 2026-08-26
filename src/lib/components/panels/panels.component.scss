@@ -310,10 +310,7 @@
 		&.hub-panels--vertical > .hub-panels__content {
 			flex: 1 1 auto;
 			width: auto;
-			min-width: max(
-				var(--hub-panels-pane-min-width),
-				var(--hub-panels-multiple-vertical-panel-min-width, 0px)
-			);
+			min-width: max(var(--hub-panels-pane-min-width), var(--hub-panels-multiple-vertical-panel-min-width, 0px));
 		}
 	}
 
@@ -515,5 +512,4 @@
 			box-shadow: none;
 		}
 	}
-
 }

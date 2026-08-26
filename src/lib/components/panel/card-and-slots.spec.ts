@@ -245,7 +245,9 @@ describe('panels card view + content header/footer slots', () => {
 			const fixture = TestBed.createComponent(AlertHost);
 			fixture.detectChanges();
 
-			const success = fixture.nativeElement.querySelector('.hub-panels__panel--alert[data-variant=success]') as HTMLElement;
+			const success = fixture.nativeElement.querySelector(
+				'.hub-panels__panel--alert[data-variant=success]'
+			) as HTMLElement;
 			expect(success.style.getPropertyValue('--hub-panels-alert-accent')).toBe('var(--hub-sys-color-success, success)');
 		});
 
