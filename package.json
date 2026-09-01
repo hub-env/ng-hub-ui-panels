@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-panels",
-	"version": "22.10.2",
+	"version": "22.10.3",
 	"license": "MIT",
 	"description": "A versatile, accessible content-panels container for Angular with four visualizations (tabs, pills, accordion, card), standalone cards, content header/footer slots, routing, reactive forms and keyboard navigation. Part of the ng-hub-ui family.",
 	"author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
@@ -8,7 +8,7 @@
 		"type": "git",
 		"url": "git+https://github.com/carlos-morcillo/ng-hub-ui-panels.git"
 	},
-	"homepage": "https://hubui.dev/",
+	"homepage": "https://hubui.dev/en/panels/overview/",
 	"keywords": [
 		"angular",
 		"tabs",
