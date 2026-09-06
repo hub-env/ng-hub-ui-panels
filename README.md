@@ -76,6 +76,7 @@ import {
 	PanelComponent,
 	HubTabNavComponent,
 	PanelHeadingDirective,
+	PanelHeadingActionsDirective,
 	PanelHeaderDirective,
 	PanelFooterDirective
 } from 'ng-hub-ui-panels';
@@ -136,8 +137,18 @@ npm install ng-hub-ui-panels
 	"@angular/common": ">=21.0.0",
 	"@angular/core": ">=21.0.0",
 	"@angular/forms": ">=21.0.0",
-	"@angular/router": ">=21.0.0"
+	"@angular/router": ">=21.0.0",
+	"ng-hub-ui-ds": ">=22.0.0",
+	"ng-hub-ui-utils": ">=22.7.0"
 }
+```
+
+`ng-hub-ui-utils` is **required**: both components resolve their accent through its
+`resolveHubAccent`, so a project without it fails to build. `ng-hub-ui-ds` is
+**optional** (see the theming note above) — panels ships fallbacks and works without it.
+
+```bash
+npm install ng-hub-ui-utils
 ```
 
 ---
@@ -407,6 +418,8 @@ the active panel follows the current URL (`tabs` / `pills` views only).
 | `isKeysAllowed` | `boolean` | `true` | Enables keyboard navigation. |
 | `multiple` | `boolean` | `false` | Accordion: allow several panels expanded at once. |
 | `flush` | `boolean` | `false` | Accordion: edge-to-edge layout without outer chrome. |
+| `togglePosition` | `HubPanelsTogglePosition` (`'start' \| 'end'`) | `'end'` | Accordion: side of the header row the disclosure chevron sits on (logical, so it mirrors under RTL). |
+| `variant` | `HubPanelVariant \| string` | `undefined` | Semantic accent of the navigation strip (active/hover tab, active pill, active accordion header). Any string works: it reads `--hub-sys-color-<variant>`. |
 | `bindValue` | `string` | `undefined` | Dot-notation path applied to each panel value. |
 | `compareWith` | `(a, b) => boolean` | `===` | Equality used to match form values. |
 
@@ -421,7 +434,8 @@ the active panel follows the current URL (`tabs` / `pills` views only).
 | Input | Type | Default | Description |
 | --- | --- | --- | --- |
 | `heading` | `string` | `undefined` | Plain-text header (ignored when a `hubPanelHeading` template is present). |
-| `variant` | `HubSemanticColor \| string` | `undefined` | Card only: tints the whole card from one semantic accent (reflected as `data-variant`). |
+| `appearance` | `HubPanelAppearance` (`'card' \| 'alert'`) | `'card'` | Card views only: a plain card or a semantic `alert` callout. Ignored in the tabs / pills / accordion strip views. |
+| `variant` | `HubPanelVariant \| string` | `undefined` | Semantic accent of the panel: tints the whole card (reflected as `data-variant`) or colours the `alert`. Any string works: it reads `--hub-sys-color-<variant>`. |
 | `flush` | `boolean` | `false` | Card only: removes the body padding for edge-to-edge content. |
 | `fill` | `boolean` | `false` | Card only: fills the parent's height and scrolls the body. |
 | `standalone` | attribute | — | Static attribute: opts a loose `<hub-panel>` OUT of an ancestor `<hub-panels>` so it renders as a plain card. |
@@ -440,6 +454,7 @@ the active panel follows the current URL (`tabs` / `pills` views only).
 
 | Output | Payload | Description |
 | --- | --- | --- |
+| `activeChange` | `boolean` | Change half of the two-way `active` model; emitted with the new expanded state. |
 | `selectPanel` | `PanelComponent` | Emitted when the panel becomes active. |
 | `deselectPanel` | `PanelComponent` | Emitted when the panel stops being active. |
 | `removed` | `PanelComponent` | Emitted on removal (✕ or Delete). |
@@ -468,8 +483,22 @@ selected `value`; the consumer renders the active view itself.
 ### Directives
 
 - `hubPanelHeading` — marks an `<ng-template>` inside a `hub-panel` as its custom **navigational** header (tab/pill link or accordion disclosure button).
+- `hubPanelHeadingActions` — marks an `<ng-template>` inside a `hub-panel` as the accordion row's **actions** slot, rendered beside the disclosure button (never inside it) so real controls stay valid and reachable while the row is collapsed.
 - `hubPanelHeader` — marks an element inside a `hub-panel` as the content **header** band, rendered at the top of the panel body in every view.
 - `hubPanelFooter` — marks an element inside a `hub-panel` as the content **footer** band, rendered at the bottom of the panel body in every view.
+
+### `PanelsComponent` methods
+
+Reach the container with `viewChild(PanelsComponent)` to drive it imperatively. Beyond
+these four, its public members are the `ControlValueAccessor` contract Angular calls and
+the registration hooks `<hub-panel>` uses.
+
+| Method | Signature | Description |
+| --- | --- | --- |
+| `selectPanel` | `(panel: PanelComponent) => void` | Activates a panel as a user click would: marks it active, navigates when routed and emits `panelChange`. |
+| `togglePanel` | `(panel: PanelComponent) => void` | Accordion toggle for a panel, honouring `multiple`. |
+| `removePanel` | `(panel: PanelComponent, options?: { reselect?: boolean; emit?: boolean }) => void` | Removes a panel from the group. |
+| `removePanelAndRefocus` | `(panel: PanelComponent) => void` | Removes a panel and hands keyboard focus to the closest remaining header, so a Delete-key removal never drops focus to the body. |
 
 ### Configuration
 
@@ -507,6 +536,24 @@ hub-panel {
 
 The accordion view also reads the `--hub-accordion-*` contract, so themes written
 for `ng-hub-ui-accordion` keep working.
+
+### `hub-panels-theme` mixin
+
+For the common knobs there is a one-call SCSS mixin, so a theme is a single include
+instead of a list of custom properties. Every parameter is optional and only the ones
+you pass are emitted.
+
+```scss
+@use 'ng-hub-ui-panels/styles' as panels;
+
+.settings {
+	@include panels.hub-panels-theme($accent: var(--hub-sys-color-brand), $border-radius: 0.75rem);
+}
+```
+
+`$accent` feeds `--hub-panels-accent`, from which the component derives the
+`-emphasis` / `-subtle` / `-on` roles at runtime. Any token the mixin does not expose is
+still set as a `--hub-panels-*` custom property.
 
 ---
 

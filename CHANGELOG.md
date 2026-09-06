@@ -5,6 +5,54 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.10.4] - 2026-09-06
+
+### Added
+
+- **`BREAKING_CHANGES.md`, with the three breaks this library had already shipped without one.** The major here states
+  which Angular major is targeted, so it can never be raised to warn of a break — this file is the only warning a
+  consumer gets, and until now panels had nowhere to give it. Written up: the two CSS breaks of 22.8.2 (the disclosure
+  button stopped painting the row surface and stopped being `position: relative`, both filed as `Changed` and both
+  released under a patch number), and the 22.3.0 scoping of the `PanelsComponent` injection to `host: true`, which stops
+  a wrapper component's own `<hub-panel>` from joining a group outside its template. Each entry carries the migration
+  the changelog only stated in passing. Documentation only — no code, types or styles change.
+
+- **`FUNCTIONALITIES.md`, the feature matrix the package never shipped.** The site builds one from
+  `panels-functionalities.ts`, so the content existed but stopped at the docs site: a reader who only has the
+  package had no way to tell which of the four visualizations, which inputs and which directives are actually
+  demonstrated. Nine sibling libraries ship the file and the repository's conventions ask for it.
+- **The README documents the API it was silent about.** `<hub-panels>` gains rows for `togglePosition` and the
+  strip-accent `variant` (shipped in 22.1.0), `<hub-panel>` a row for `appearance` and one for the `activeChange`
+  half of its `active` model, the directive list gains `hubPanelHeadingActions` — public since 22.8.0 and taught
+  in the prose above it — and there is now a table for the container's imperative methods, including the
+  `removePanelAndRefocus` announced in 22.9.0. The Styling section names the `hub-panels-theme` SCSS mixin the
+  package has been forwarding from `ng-hub-ui-panels/styles` all along.
+- **The documentation page documents the same surface.** New rows for the container `variant` (its only `variant`
+  row described the alert colour, so the input added in 22.1.0 read as undocumented), for the `id` a consumer
+  overrides to get stable ARIA ids, and for `<hub-panel>`'s `activeChange`; a methods block for the four
+  consumer-facing container methods; and the four releases missing from "Recent changes" (22.8.2, 22.8.1, 22.1.1
+  and 22.0.0), so the two CSS-contract breaks of 22.8.2 are visible on the page and not only in the changelog.
+
+### Fixed
+
+- **`HubPanelAppearance` and `HubPanelVariant` are now re-exported from the package entry point.**
+  The 21.3.0 notes announced them as exported types, but the barrel never listed them, so the union
+  behind `<hub-panel [appearance]>` and `[variant]` was unreachable from outside the library and
+  consumers had to redeclare it by hand — or widen it to `string` and lose the check the types exist
+  for — in every project. No runtime change: the surface is type-only.
+
+- **The peer-dependency block left out the peer the library cannot run without.** Both components resolve their
+  accent through `resolveHubAccent` from `ng-hub-ui-utils`, declared as a required peer in the manifest since
+  22.10.0 but absent from the README's JSON block, so a consumer who installed exactly what the README listed hit
+  an unresolved import at build time. The optional `ng-hub-ui-ds` peer was missing from the same block.
+- **`HubSemanticColor` does not exist in this library.** The `variant` row of both READMEs named it as the input's
+  type; it lives in `ng-hub-ui-buttons`. The type is `HubPanelVariant | string`, and the row also claimed the
+  input was "Card only" when the same input colours the `alert` appearance.
+- **The library was described as having three visualizations.** The page description, the overview, the
+  "Visualizations" highlight and the `type` and feature strings in all eight locale bundles predate the `card`
+  view added in 22.4.0, so the docs advertised one fewer view than the package's own manifest. The same omission
+  is corrected in the root README index, which also never mentioned the `<hub-tab-nav>` strip.
+
 ## [22.10.3] - 2026-09-01
 
 ### Changed
@@ -35,7 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **NEW peer dependency: `ng-hub-ui-utils` `>=22.7.0`.** Consumers must have `ng-hub-ui-utils` installed alongside this library (it is where `resolveHubAccent` lives) — unlike the optional `ng-hub-ui-ds` peer, this one is required. Users installing via `ng add ng-hub-ui-installer` get it automatically; manual installs need `npm i ng-hub-ui-utils`.
+- **NEW peer dependency: `ng-hub-ui-utils` `>=22.7.0`.** Consumers must have `ng-hub-ui-utils` installed alongside this library (it is where `resolveHubAccent` lives) — unlike the optional `ng-hub-ui-ds` peer, this one is required. Users installing via `ng add ng-hub-ui` get it automatically; manual installs need `npm i ng-hub-ui-utils`.
 
 ## [22.9.0] - 2026-07-28
 
