@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { PanelHeadingActionsDirective } from '../../directives/panel-heading-actions.directive';
-import { PanelHeadingDirective } from '../../directives/panel-heading.directive';
-import { PanelsComponent } from '../panels/panels.component';
-import { PanelComponent } from './panel.component';
+import { HubPanelHeadingActionsDirective } from '../../directives/panel-heading-actions.directive';
+import { HubPanelHeadingDirective } from '../../directives/panel-heading.directive';
+import { HubPanelsComponent } from '../panels/panels.component';
+import { HubPanelComponent } from './panel.component';
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent, PanelHeadingDirective, PanelHeadingActionsDirective],
+	imports: [HubPanelsComponent, HubPanelComponent, HubPanelHeadingDirective, HubPanelHeadingActionsDirective],
 	template: `
 		<hub-panels type="accordion" multiple [togglePosition]="togglePosition">
 			<hub-panel>
@@ -133,7 +133,7 @@ describe('accordion heading actions', () => {
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent],
+	imports: [HubPanelsComponent, HubPanelComponent],
 	template: `
 		<hub-panels type="accordion" (panelChange)="changes = changes + 1">
 			<hub-panel heading="First" removable>Body 1</hub-panel>
@@ -233,7 +233,7 @@ describe('accordion togglePosition', () => {
 	it('does not leak the chevron placement into a nested accordion', () => {
 		@Component({
 			standalone: true,
-			imports: [PanelsComponent, PanelComponent],
+			imports: [HubPanelsComponent, HubPanelComponent],
 			template: `
 				<hub-panels type="accordion" togglePosition="start">
 					<hub-panel heading="Group" class="outer">
@@ -259,7 +259,7 @@ describe('accordion togglePosition', () => {
 	it('never flags toggle-start outside the accordion view', () => {
 		@Component({
 			standalone: true,
-			imports: [PanelsComponent, PanelComponent],
+			imports: [HubPanelsComponent, HubPanelComponent],
 			template: `
 				<hub-panels type="tabs" togglePosition="start">
 					<hub-panel heading="A">A</hub-panel>

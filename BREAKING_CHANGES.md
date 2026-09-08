@@ -7,6 +7,54 @@ inside a major line the highest a break can go is a minor, and the notice semant
 in this file. The two entries under 22.8.2 went out in a patch, which is the reason they need writing up more than any
 other entry, not less.
 
+## [22.11.0] - 2026-09-08
+
+### The seven exported classes are renamed with the `Hub` prefix
+
+- **Change**: `PanelsComponent` is now `HubPanelsComponent`, `PanelComponent` is
+  `HubPanelComponent`, `PanelsConfig` is `HubPanelsConfig`, and the four content directives are
+  `HubPanelHeadingDirective`, `HubPanelHeadingActionsDirective`, `HubPanelHeaderDirective` and
+  `HubPanelFooterDirective`. Only the exported names move: the classes are the same objects, the
+  selectors (`hub-panels`, `hub-panel`, `[hubPanelHeading]`, `[hubPanelHeadingActions]`,
+  `[hubPanelHeader]`, `[hubPanelFooter]`) are untouched, and every exported type —
+  `PanelChangeEvent`, `HubPanelVariant`, `PanelsType` and the rest — keeps its name.
+
+- **Why**: `PanelComponent` and `PanelsComponent` are ordinary names for ordinary things, and an
+  application that has a panel of its own will reach for one of them. An unprefixed export puts the
+  library in the consumer's namespace: the file that imports ours and declares its own has two
+  bindings on one identifier and has to alias its way out of a collision it did not create. The
+  selectors and the types of this package were already prefixed — `hub-panel`, `HubPanelVariant`,
+  `HubPanelsTogglePosition` — so the classes were the last part of the surface still spelled the
+  other way, which is also why the same import list could show both conventions at once.
+  `PanelsConfig` is the sharpest case of the three: it is the DI token an application writes in its
+  own `providers` array, so the collision would show up in the place hardest to read.
+
+- **What happens if you do nothing**: today, nothing. All seven old names are still exported as
+  `@deprecated` aliases resolving to the very same classes, so imports keep compiling, `imports:
+  [...]` arrays keep matching, `viewChild(PanelsComponent)` still finds the container and a
+  provider written as `{ provide: PanelsConfig, useValue: { ...new PanelsConfig(), type: 'pills' } }`
+  still overrides the defaults — the alias and the new name are one class. They are removed in
+  **23.0.0**, the release that moves this family to Angular 23, and that is the version where the
+  import stops compiling.
+
+- **Migration**: rename the imports and their uses. No template and no stylesheet changes.
+
+    ```ts
+    // Before
+    import { PanelsComponent, PanelComponent, PanelHeadingDirective, PanelsConfig } from 'ng-hub-ui-panels';
+
+    // After
+    import {
+    	HubPanelsComponent,
+    	HubPanelComponent,
+    	HubPanelHeadingDirective,
+    	HubPanelsConfig
+    } from 'ng-hub-ui-panels';
+    ```
+
+    A `PanelChangeEvent` handler needs no change; its `current` and `prev` were always the panel
+    class, which is the same class under its new name.
+
 ## [22.8.2] - 2026-07-09
 
 Neither entry below renamed or removed anything, so every consumer kept compiling and only the rendered result moved.

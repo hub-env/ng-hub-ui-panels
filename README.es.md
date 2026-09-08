@@ -73,13 +73,13 @@ Los componentes son standalone — impórtalos directamente donde los uses:
 
 ```ts
 import {
-	PanelsComponent,
-	PanelComponent,
+	HubPanelsComponent,
+	HubPanelComponent,
 	HubTabNavComponent,
-	PanelHeadingDirective,
-	PanelHeadingActionsDirective,
-	PanelHeaderDirective,
-	PanelFooterDirective
+	HubPanelHeadingDirective,
+	HubPanelHeadingActionsDirective,
+	HubPanelHeaderDirective,
+	HubPanelFooterDirective
 } from 'ng-hub-ui-panels';
 ```
 
@@ -216,10 +216,10 @@ extra.
 <hub-panels type="accordion" togglePosition="start">…</hub-panels>
 ```
 
-Fija el valor por defecto de toda la app con `PanelsConfig`:
+Fija el valor por defecto de toda la app con `HubPanelsConfig`:
 
 ```ts
-providers: [{ provide: PanelsConfig, useValue: { ...new PanelsConfig(), togglePosition: 'start' } }];
+providers: [{ provide: HubPanelsConfig, useValue: { ...new HubPanelsConfig(), togglePosition: 'start' } }];
 ```
 
 ### Cards
@@ -459,9 +459,9 @@ Cuando el panel activo está enrutado, el área de contenido renderiza un
 | Output | Payload | Descripción |
 | --- | --- | --- |
 | `activeChange` | `boolean` | Mitad de cambio del model bidireccional `active`; se emite con el nuevo estado expandido. |
-| `selectPanel` | `PanelComponent` | Se emite cuando el panel se activa. |
-| `deselectPanel` | `PanelComponent` | Se emite cuando el panel deja de estar activo. |
-| `removed` | `PanelComponent` | Se emite al eliminarlo (✕ o Delete). |
+| `selectPanel` | `HubPanelComponent` | Se emite cuando el panel se activa. |
+| `deselectPanel` | `HubPanelComponent` | Se emite cuando el panel deja de estar activo. |
+| `removed` | `HubPanelComponent` | Se emite al eliminarlo (✕ o Delete). |
 
 ### `<hub-tab-nav>` — tira ligera enlazada a valor
 
@@ -491,25 +491,25 @@ emite el `value` seleccionado; el consumidor renderiza la vista activa por su cu
 - `hubPanelHeader` — marca un elemento dentro de un `hub-panel` como la banda de **cabecera** de contenido, renderizada en la parte superior del cuerpo del panel en todas las vistas.
 - `hubPanelFooter` — marca un elemento dentro de un `hub-panel` como la banda de **pie** de contenido, renderizada en la parte inferior del cuerpo del panel en todas las vistas.
 
-### Métodos de `PanelsComponent`
+### Métodos de `HubPanelsComponent`
 
-Obtén el contenedor con `viewChild(PanelsComponent)` para manejarlo de forma imperativa.
+Obtén el contenedor con `viewChild(HubPanelsComponent)` para manejarlo de forma imperativa.
 Aparte de estos cuatro, sus miembros públicos son el contrato `ControlValueAccessor` que
 llama Angular y los hooks de registro que usa `<hub-panel>`.
 
 | Método | Firma | Descripción |
 | --- | --- | --- |
-| `selectPanel` | `(panel: PanelComponent) => void` | Activa un panel como lo haría un clic: lo marca activo, navega si está enrutado y emite `panelChange`. |
-| `togglePanel` | `(panel: PanelComponent) => void` | Alterna un panel en la vista accordion, respetando `multiple`. |
-| `removePanel` | `(panel: PanelComponent, options?: { reselect?: boolean; emit?: boolean }) => void` | Elimina un panel del grupo. |
-| `removePanelAndRefocus` | `(panel: PanelComponent) => void` | Elimina un panel y pasa el foco de teclado a la cabecera más cercana que quede, de modo que un borrado con Delete nunca deja el foco en el body. |
+| `selectPanel` | `(panel: HubPanelComponent) => void` | Activa un panel como lo haría un clic: lo marca activo, navega si está enrutado y emite `panelChange`. |
+| `togglePanel` | `(panel: HubPanelComponent) => void` | Alterna un panel en la vista accordion, respetando `multiple`. |
+| `removePanel` | `(panel: HubPanelComponent, options?: { reselect?: boolean; emit?: boolean }) => void` | Elimina un panel del grupo. |
+| `removePanelAndRefocus` | `(panel: HubPanelComponent) => void` | Elimina un panel y pasa el foco de teclado a la cabecera más cercana que quede, de modo que un borrado con Delete nunca deja el foco en el body. |
 
 ### Configuración
 
-Provee `PanelsConfig` para cambiar los valores por defecto en toda la aplicación:
+Provee `HubPanelsConfig` para cambiar los valores por defecto en toda la aplicación:
 
 ```ts
-providers: [{ provide: PanelsConfig, useValue: { ...new PanelsConfig(), type: 'pills' } }];
+providers: [{ provide: HubPanelsConfig, useValue: { ...new HubPanelsConfig(), type: 'pills' } }];
 ```
 
 ---

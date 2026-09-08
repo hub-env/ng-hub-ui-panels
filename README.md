@@ -72,13 +72,13 @@ The components are standalone — import them directly where you use them:
 
 ```ts
 import {
-	PanelsComponent,
-	PanelComponent,
+	HubPanelsComponent,
+	HubPanelComponent,
 	HubTabNavComponent,
-	PanelHeadingDirective,
-	PanelHeadingActionsDirective,
-	PanelHeaderDirective,
-	PanelFooterDirective
+	HubPanelHeadingDirective,
+	HubPanelHeadingActionsDirective,
+	HubPanelHeaderDirective,
+	HubPanelFooterDirective
 } from 'ng-hub-ui-panels';
 ```
 
@@ -213,10 +213,10 @@ chevron lands on the right edge under `dir="rtl"` without any extra rule.
 <hub-panels type="accordion" togglePosition="start">…</hub-panels>
 ```
 
-Set the default for the whole app through `PanelsConfig`:
+Set the default for the whole app through `HubPanelsConfig`:
 
 ```ts
-providers: [{ provide: PanelsConfig, useValue: { ...new PanelsConfig(), togglePosition: 'start' } }];
+providers: [{ provide: HubPanelsConfig, useValue: { ...new HubPanelsConfig(), togglePosition: 'start' } }];
 ```
 
 ### Cards
@@ -455,9 +455,9 @@ the active panel follows the current URL (`tabs` / `pills` views only).
 | Output | Payload | Description |
 | --- | --- | --- |
 | `activeChange` | `boolean` | Change half of the two-way `active` model; emitted with the new expanded state. |
-| `selectPanel` | `PanelComponent` | Emitted when the panel becomes active. |
-| `deselectPanel` | `PanelComponent` | Emitted when the panel stops being active. |
-| `removed` | `PanelComponent` | Emitted on removal (✕ or Delete). |
+| `selectPanel` | `HubPanelComponent` | Emitted when the panel becomes active. |
+| `deselectPanel` | `HubPanelComponent` | Emitted when the panel stops being active. |
+| `removed` | `HubPanelComponent` | Emitted on removal (✕ or Delete). |
 
 ### `<hub-tab-nav>` — lightweight value-bound strip
 
@@ -487,25 +487,25 @@ selected `value`; the consumer renders the active view itself.
 - `hubPanelHeader` — marks an element inside a `hub-panel` as the content **header** band, rendered at the top of the panel body in every view.
 - `hubPanelFooter` — marks an element inside a `hub-panel` as the content **footer** band, rendered at the bottom of the panel body in every view.
 
-### `PanelsComponent` methods
+### `HubPanelsComponent` methods
 
-Reach the container with `viewChild(PanelsComponent)` to drive it imperatively. Beyond
+Reach the container with `viewChild(HubPanelsComponent)` to drive it imperatively. Beyond
 these four, its public members are the `ControlValueAccessor` contract Angular calls and
 the registration hooks `<hub-panel>` uses.
 
 | Method | Signature | Description |
 | --- | --- | --- |
-| `selectPanel` | `(panel: PanelComponent) => void` | Activates a panel as a user click would: marks it active, navigates when routed and emits `panelChange`. |
-| `togglePanel` | `(panel: PanelComponent) => void` | Accordion toggle for a panel, honouring `multiple`. |
-| `removePanel` | `(panel: PanelComponent, options?: { reselect?: boolean; emit?: boolean }) => void` | Removes a panel from the group. |
-| `removePanelAndRefocus` | `(panel: PanelComponent) => void` | Removes a panel and hands keyboard focus to the closest remaining header, so a Delete-key removal never drops focus to the body. |
+| `selectPanel` | `(panel: HubPanelComponent) => void` | Activates a panel as a user click would: marks it active, navigates when routed and emits `panelChange`. |
+| `togglePanel` | `(panel: HubPanelComponent) => void` | Accordion toggle for a panel, honouring `multiple`. |
+| `removePanel` | `(panel: HubPanelComponent, options?: { reselect?: boolean; emit?: boolean }) => void` | Removes a panel from the group. |
+| `removePanelAndRefocus` | `(panel: HubPanelComponent) => void` | Removes a panel and hands keyboard focus to the closest remaining header, so a Delete-key removal never drops focus to the body. |
 
 ### Configuration
 
-Provide `PanelsConfig` to change defaults application-wide:
+Provide `HubPanelsConfig` to change defaults application-wide:
 
 ```ts
-providers: [{ provide: PanelsConfig, useValue: { ...new PanelsConfig(), type: 'pills' } }];
+providers: [{ provide: HubPanelsConfig, useValue: { ...new HubPanelsConfig(), type: 'pills' } }];
 ```
 
 ---

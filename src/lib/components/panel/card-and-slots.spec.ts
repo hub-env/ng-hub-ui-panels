@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { PanelFooterDirective } from '../../directives/panel-footer.directive';
-import { PanelHeaderDirective } from '../../directives/panel-header.directive';
-import { PanelComponent } from './panel.component';
-import { PanelsComponent } from '../panels/panels.component';
+import { HubPanelFooterDirective } from '../../directives/panel-footer.directive';
+import { HubPanelHeaderDirective } from '../../directives/panel-header.directive';
+import { HubPanelComponent } from './panel.component';
+import { HubPanelsComponent } from '../panels/panels.component';
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent, PanelHeaderDirective, PanelFooterDirective],
+	imports: [HubPanelsComponent, HubPanelComponent, HubPanelHeaderDirective, HubPanelFooterDirective],
 	template: `
 		<hub-panels type="card">
 			<hub-panel>
@@ -25,7 +25,7 @@ class CardContainerHost {}
 
 @Component({
 	standalone: true,
-	imports: [PanelComponent, PanelHeaderDirective, PanelFooterDirective],
+	imports: [HubPanelComponent, HubPanelHeaderDirective, HubPanelFooterDirective],
 	template: `
 		<hub-panel>
 			<div hubPanelHeader>Standalone header</div>
@@ -38,7 +38,7 @@ class StandaloneHost {}
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent, PanelHeaderDirective],
+	imports: [HubPanelsComponent, HubPanelComponent, HubPanelHeaderDirective],
 	template: `
 		<hub-panels type="tabs">
 			<hub-panel heading="A">
@@ -52,7 +52,7 @@ class TabsWithHeaderHost {}
 
 @Component({
 	standalone: true,
-	imports: [PanelComponent],
+	imports: [HubPanelComponent],
 	template: `
 		<hub-panel appearance="alert" variant="success">Saved successfully</hub-panel>
 		<hub-panel appearance="alert">Neutral notice</hub-panel>
@@ -62,7 +62,7 @@ class AlertHost {}
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent],
+	imports: [HubPanelsComponent, HubPanelComponent],
 	template: `
 		<hub-panels type="tabs">
 			<hub-panel heading="A" appearance="alert" variant="danger">Body A</hub-panel>
@@ -73,14 +73,14 @@ class AlertInTabsHost {}
 
 @Component({
 	standalone: true,
-	imports: [PanelComponent],
+	imports: [HubPanelComponent],
 	template: `<hub-panel appearance="alert" variant="brand">Custom accent</hub-panel>`
 })
 class CustomVariantAlertHost {}
 
 @Component({
 	standalone: true,
-	imports: [PanelComponent],
+	imports: [HubPanelComponent],
 	template: `<hub-panel appearance="alert" variant="#ff0000">Literal accent</hub-panel>`
 })
 class LiteralVariantAlertHost {}
@@ -88,14 +88,14 @@ class LiteralVariantAlertHost {}
 @Component({
 	selector: 'spec-nested-feature',
 	standalone: true,
-	imports: [PanelComponent],
+	imports: [HubPanelComponent],
 	template: `<hub-panel><p>nested card body</p></hub-panel>`
 })
 class NestedFeatureComponent {}
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent, NestedFeatureComponent],
+	imports: [HubPanelsComponent, HubPanelComponent, NestedFeatureComponent],
 	template: `
 		<hub-panels type="tabs">
 			<hub-panel heading="Tab A"><spec-nested-feature /></hub-panel>
@@ -106,7 +106,7 @@ class NestedStandaloneInTabsHost {}
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent],
+	imports: [HubPanelsComponent, HubPanelComponent],
 	template: `
 		<hub-panels type="tabs">
 			@if (true) {

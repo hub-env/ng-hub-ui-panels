@@ -24,15 +24,15 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 
 import type { HubPanelsTogglePosition, HubPanelVariant, PanelChangeEvent, PanelsType } from '../../models/panels.types';
-import { PanelsConfig } from '../../services/panels-config.service';
+import { HubPanelsConfig } from '../../services/panels-config.service';
 import { contentBoxWidth } from '../../utils/content-box-width';
 import { readByPath } from '../../utils/read-by-path';
 import { resolveHubAccent } from 'ng-hub-ui-utils';
-import type { PanelComponent } from '../panel/panel.component';
+import type { HubPanelComponent } from '../panel/panel.component';
 
 interface MultipleHeaderGroup {
-	activePanel?: PanelComponent;
-	headers: PanelComponent[];
+	activePanel?: HubPanelComponent;
+	headers: HubPanelComponent[];
 }
 
 /**
@@ -82,7 +82,7 @@ interface MultipleHeaderGroup {
 	providers: [
 		{
 			provide: NG_VALUE_ACCESSOR,
-			useExisting: forwardRef(() => PanelsComponent),
+			useExisting: forwardRef(() => HubPanelsComponent),
 			multi: true
 		}
 	],
@@ -101,14 +101,14 @@ interface MultipleHeaderGroup {
 		'(window:resize)': 'onWindowResize()'
 	}
 })
-export class PanelsComponent implements ControlValueAccessor {
+export class HubPanelsComponent implements ControlValueAccessor {
 	readonly #router = inject(Router);
 	readonly #renderer = inject(Renderer2);
 	readonly #elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 	readonly #destroyRef = inject(DestroyRef);
 
 	/** Container-wide defaults (aria labels, default type, keyboard toggle). */
-	protected readonly config = inject(PanelsConfig);
+	protected readonly config = inject(HubPanelsConfig);
 
 	/** Scrollable container hosting the panel headers (`tabs` / `pills` views). */
 	readonly navScroller = viewChild<ElementRef<HTMLElement>>('navScroller');
@@ -183,7 +183,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	readonly compareWith = input<(a: unknown, b: unknown) => boolean>((a, b) => a === b);
 
 	/** Registered panels, in projection order. */
-	readonly panels = signal<PanelComponent[]>([]);
+	readonly panels = signal<HubPanelComponent[]>([]);
 
 	/** Currently active panel, if any (the first one, under `multiple`). */
 	readonly activePanel = computed(() => this.panels().find((panel) => panel.active()));
@@ -298,10 +298,10 @@ export class PanelsComponent implements ControlValueAccessor {
 	}
 
 	/**
-	 * Registers a panel in the container. Called by `PanelComponent` on
+	 * Registers a panel in the container. Called by `HubPanelComponent` on
 	 * construction — not meant for manual use.
 	 */
-	registerPanel(panel: PanelComponent): void {
+	registerPanel(panel: HubPanelComponent): void {
 		this.panels.update((panels) => [...panels, panel]);
 		this.#scheduleSync();
 	}
@@ -311,7 +311,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	 * enabled neighbour when the removed panel was active; `emit` fires the
 	 * panel's `removed` output.
 	 */
-	removePanel(panel: PanelComponent, options: { reselect?: boolean; emit?: boolean } = {}): void {
+	removePanel(panel: HubPanelComponent, options: { reselect?: boolean; emit?: boolean } = {}): void {
 		const { reselect = true, emit = true } = options;
 		const panels = this.panels();
 		const index = panels.indexOf(panel);
@@ -350,7 +350,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	 * or accordion button — so focus never falls back to `<body>` when the
 	 * focused control disappears with its panel.
 	 */
-	removePanelAndRefocus(panel: PanelComponent): void {
+	removePanelAndRefocus(panel: HubPanelComponent): void {
 		const index = this.panels().indexOf(panel);
 		if (index === -1) {
 			return;
@@ -365,7 +365,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	 * clicking an active panel toggles it off (the panes render side by side);
 	 * otherwise an already-active panel no-ops. Disabled panels always no-op.
 	 */
-	selectPanel(panel: PanelComponent): void {
+	selectPanel(panel: HubPanelComponent): void {
 		if (panel.disabled() || this.formDisabled()) {
 			return;
 		}
@@ -406,7 +406,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	 * closes, a closed one opens — closing the others unless `multiple`.
 	 * Emits `panelChange` when a panel opens.
 	 */
-	togglePanel(panel: PanelComponent): void {
+	togglePanel(panel: HubPanelComponent): void {
 		if (panel.disabled() || this.formDisabled()) {
 			return;
 		}
@@ -530,7 +530,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	 * Keyboard navigation between accordion headers (arrows / Home / End /
 	 * Delete). Enter and Space toggle natively through the button click.
 	 */
-	onAccordionKeydown(event: KeyboardEvent, panel: PanelComponent): void {
+	onAccordionKeydown(event: KeyboardEvent, panel: HubPanelComponent): void {
 		if (!this.isKeysAllowed()) {
 			return;
 		}
@@ -588,7 +588,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	}
 
 	/** Global index of a panel within the projected strip order. */
-	protected panelIndex(panel: PanelComponent): number {
+	protected panelIndex(panel: HubPanelComponent): number {
 		return this.panelIndexMap().get(panel) ?? -1;
 	}
 
@@ -835,7 +835,7 @@ export class PanelsComponent implements ControlValueAccessor {
 	}
 
 	/** Form value of a panel with the `bindValue` path applied. */
-	#comparableValue(panel: PanelComponent): unknown {
+	#comparableValue(panel: HubPanelComponent): unknown {
 		const rawValue = panel.formValue();
 		const bindPath = this.bindValue();
 		return bindPath ? readByPath(rawValue, bindPath) : rawValue;

@@ -3,12 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import type { PanelChangeEvent, PanelsType } from '../../models/panels.types';
-import { PanelComponent } from '../panel/panel.component';
-import { PanelsComponent } from './panels.component';
+import { HubPanelComponent } from '../panel/panel.component';
+import { HubPanelsComponent } from './panels.component';
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent],
+	imports: [HubPanelsComponent, HubPanelComponent],
 	template: `
 		<hub-panels [type]="type" [multiple]="multiple" (panelChange)="onPanelChange($event)">
 			<hub-panel heading="One" value="one">Uno</hub-panel>
@@ -35,7 +35,7 @@ async function settle(fixture: ComponentFixture<HostComponent>): Promise<void> {
 	fixture.detectChanges();
 }
 
-describe('PanelsComponent', () => {
+describe('HubPanelsComponent', () => {
 	let fixture: ComponentFixture<HostComponent>;
 	let host: HostComponent;
 
@@ -102,7 +102,7 @@ describe('PanelsComponent', () => {
 
 	describe('semantic-or-literal strip accent', () => {
 		it('resolves a semantic variant to its sys token with a raw fallback', () => {
-			const accentFixture = TestBed.createComponent(PanelsComponent);
+			const accentFixture = TestBed.createComponent(HubPanelsComponent);
 			accentFixture.componentRef.setInput('variant', 'primary');
 			accentFixture.detectChanges();
 
@@ -112,7 +112,7 @@ describe('PanelsComponent', () => {
 		});
 
 		it('passes a literal colour through unchanged', () => {
-			const accentFixture = TestBed.createComponent(PanelsComponent);
+			const accentFixture = TestBed.createComponent(HubPanelsComponent);
 			accentFixture.componentRef.setInput('variant', '#ff0000');
 			accentFixture.detectChanges();
 

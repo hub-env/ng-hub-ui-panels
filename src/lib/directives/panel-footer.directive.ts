@@ -20,4 +20,4 @@ import { Directive } from '@angular/core';
 	selector: '[hubPanelFooter]',
 	host: { class: 'hub-panels__panel-footer' }
 })
-export class PanelFooterDirective {}
+export class HubPanelFooterDirective {}

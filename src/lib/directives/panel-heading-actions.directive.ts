@@ -1,6 +1,6 @@
 import { Directive, inject, TemplateRef } from '@angular/core';
 
-import { PanelComponent } from '../components/panel/panel.component';
+import { HubPanelComponent } from '../components/panel/panel.component';
 
 /**
  * Marks an `<ng-template>` inside a `hub-panel` as that panel's header
@@ -33,8 +33,8 @@ import { PanelComponent } from '../components/panel/panel.component';
  * ```
  */
 @Directive({ selector: '[hubPanelHeadingActions]' })
-export class PanelHeadingActionsDirective {
+export class HubPanelHeadingActionsDirective {
 	constructor() {
-		inject(PanelComponent).headingActionsRef.set(inject(TemplateRef));
+		inject(HubPanelComponent).headingActionsRef.set(inject(TemplateRef));
 	}
 }

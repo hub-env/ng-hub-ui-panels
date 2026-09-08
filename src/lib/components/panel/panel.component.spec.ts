@@ -3,12 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { provideRouter } from '@angular/router';
 
-import { PanelsComponent } from '../panels/panels.component';
-import { PanelComponent } from './panel.component';
+import { HubPanelsComponent } from '../panels/panels.component';
+import { HubPanelComponent } from './panel.component';
 
 @Component({
 	standalone: true,
-	imports: [PanelsComponent, PanelComponent, ReactiveFormsModule],
+	imports: [HubPanelsComponent, HubPanelComponent, ReactiveFormsModule],
 	template: `
 		<hub-panels [formControl]="control" [multiple]="multiple">
 			<hub-panel heading="A" value="a">A</hub-panel>
@@ -27,7 +27,7 @@ async function settle(fixture: ComponentFixture<FormHostComponent>): Promise<voi
 	fixture.detectChanges();
 }
 
-describe('PanelComponent form integration', () => {
+describe('HubPanelComponent form integration', () => {
 	let fixture: ComponentFixture<FormHostComponent>;
 	let host: FormHostComponent;
 

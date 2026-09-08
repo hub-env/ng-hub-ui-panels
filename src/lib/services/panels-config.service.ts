@@ -9,11 +9,11 @@ import type { HubPanelsTogglePosition, PanelsType } from '../models/panels.types
  * feature subtree:
  *
  * ```ts
- * providers: [{ provide: PanelsConfig, useValue: { ...new PanelsConfig(), type: 'pills' } }]
+ * providers: [{ provide: HubPanelsConfig, useValue: { ...new HubPanelsConfig(), type: 'pills' } }]
  * ```
  */
 @Injectable({ providedIn: 'root' })
-export class PanelsConfig {
+export class HubPanelsConfig {
 	/** Default navigation style — `'tabs'`, `'pills'` or `'accordion'`. */
 	type: PanelsType = 'tabs';
 

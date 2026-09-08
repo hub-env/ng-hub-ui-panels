@@ -5,6 +5,30 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.11.0] - 2026-09-08
+
+### Changed
+
+- **BREAKING — the seven exported classes are renamed with the `Hub` prefix.** `PanelsComponent`,
+  `PanelComponent`, `PanelsConfig`, `PanelHeadingDirective`, `PanelHeadingActionsDirective`,
+  `PanelHeaderDirective` and `PanelFooterDirective` become `HubPanelsComponent`,
+  `HubPanelComponent`, `HubPanelsConfig`, `HubPanelHeadingDirective`,
+  `HubPanelHeadingActionsDirective`, `HubPanelHeaderDirective` and `HubPanelFooterDirective`.
+  `PanelComponent` is an ordinary name for an ordinary thing, and an application that has a panel of
+  its own will reach for it — an unprefixed export puts the library inside the consumer's namespace
+  and leaves them aliasing their way out of a collision they did not create. The selectors and the
+  exported types were already prefixed, so the classes were the last part of this surface still
+  spelled the other way. All seven old names stay exported as deprecated aliases resolving to the
+  same classes, so imports, `viewChild()` lookups and a `{ provide: PanelsConfig, … }` provider all
+  keep working, and they are removed in 23.0.0. See `BREAKING_CHANGES.md`.
+
+### Fixed
+
+- **Both READMEs name the classes that ship.** The import block and every reference to the
+  container, the panel and the config token still used the old names, so a reader copying the
+  documented import wrote code compiling only against the deprecated aliases — which is exactly the
+  audience this rename exists to move.
+
 ## [22.10.4] - 2026-09-06
 
 ### Added

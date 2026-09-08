@@ -22,4 +22,4 @@ import { Directive } from '@angular/core';
 	selector: '[hubPanelHeader]',
 	host: { class: 'hub-panels__panel-header' }
 })
-export class PanelHeaderDirective {}
+export class HubPanelHeaderDirective {}

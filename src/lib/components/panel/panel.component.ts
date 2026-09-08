@@ -20,7 +20,7 @@ import { Params, Router } from '@angular/router';
 
 import { HubPanelAppearance, HubPanelVariant } from '../../models/panels.types';
 import { resolveHubAccent } from 'ng-hub-ui-utils';
-import { PanelsComponent } from '../panels/panels.component';
+import { HubPanelsComponent } from '../panels/panels.component';
 
 /** Monotonic counter backing the auto-generated accessibility ids. */
 let nextPanelId = 0;
@@ -30,7 +30,7 @@ let nextPanelId = 0;
  *
  * In the `tabs` / `pills` views the host element is the tab *panel*
  * (`role="tabpanel"`) and the clickable header is rendered by
- * {@link PanelsComponent} in the strip. In the `accordion` view this component
+ * {@link HubPanelsComponent} in the strip. In the `accordion` view this component
  * renders its own disclosure header plus an animated collapse wrapper around
  * the projected content. In every view the header comes from `heading` or from
  * a `<ng-template hubPanelHeading>` projected inside this element.
@@ -80,7 +80,7 @@ let nextPanelId = 0;
 		'[class.hub-panels__panel--flush]': 'flush()'
 	}
 })
-export class PanelComponent implements OnDestroy {
+export class HubPanelComponent implements OnDestroy {
 	/** Host element reference — exposed so the container can detach removed panes. */
 	readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
@@ -98,7 +98,7 @@ export class PanelComponent implements OnDestroy {
 	 * inside a component projected into a tab pane would register itself as a
 	 * hidden tab of the outer group instead of rendering as a card.
 	 */
-	protected readonly tabset = inject(PanelsComponent, { optional: true, host: true });
+	protected readonly tabset = inject(HubPanelsComponent, { optional: true, host: true });
 
 	/**
 	 * Opts a standalone `<hub-panel>` OUT of an ancestor `<hub-panels>` group so it
@@ -183,7 +183,7 @@ export class PanelComponent implements OnDestroy {
 
 	/**
 	 * Value this panel contributes when the container is used as a form control
-	 * (see {@link PanelsComponent} `ControlValueAccessor`). Defaults to `id`.
+	 * (see {@link HubPanelsComponent} `ControlValueAccessor`). Defaults to `id`.
 	 */
 	readonly value = input<unknown>(undefined);
 
@@ -191,19 +191,19 @@ export class PanelComponent implements OnDestroy {
 	readonly active = model(false);
 
 	/** Emitted when the panel becomes active. */
-	readonly selectPanel = output<PanelComponent>();
+	readonly selectPanel = output<HubPanelComponent>();
 
 	/** Emitted when the panel stops being active. */
-	readonly deselectPanel = output<PanelComponent>();
+	readonly deselectPanel = output<HubPanelComponent>();
 
 	/** Emitted when the panel is removed through the ✕ button or the Delete key. */
-	readonly removed = output<PanelComponent>();
+	readonly removed = output<HubPanelComponent>();
 
-	/** Custom header template registered by `PanelHeadingDirective`. */
+	/** Custom header template registered by `HubPanelHeadingDirective`. */
 	readonly headingRef = signal<TemplateRef<unknown> | undefined>(undefined);
 
 	/**
-	 * Header actions template registered by `PanelHeadingActionsDirective`.
+	 * Header actions template registered by `HubPanelHeadingActionsDirective`.
 	 * Rendered beside the accordion disclosure button — never inside it — so
 	 * real `<button>`s stay valid and reachable while the row is collapsed.
 	 */

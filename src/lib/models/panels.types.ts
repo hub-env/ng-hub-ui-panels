@@ -1,4 +1,4 @@
-import type { PanelComponent } from '../components/panel/panel.component';
+import type { HubPanelComponent } from '../components/panel/panel.component';
 
 /**
  * Visualization of the panels container: classic underlined/boxed `tabs`,
@@ -30,15 +30,15 @@ export type HubPanelAppearance = 'card' | 'alert';
 export type HubPanelVariant = 'primary' | 'success' | 'danger' | 'warning' | 'info';
 
 /**
- * Event emitted by {@link PanelsComponent.panelChange} when the user
+ * Event emitted by {@link HubPanelsComponent.panelChange} when the user
  * activates (opens) a panel.
  */
 export interface PanelChangeEvent {
 	/** The newly selected panel. */
-	current: PanelComponent;
+	current: HubPanelComponent;
 	/**
 	 * The panel that was active before the change, if any. Not provided in
 	 * accordion view with `multiple`, where several panels stay open.
 	 */
-	prev?: PanelComponent;
+	prev?: HubPanelComponent;
 }

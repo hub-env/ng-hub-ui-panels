@@ -33,7 +33,7 @@ The library ships three components — `hub-panels` (the container), `hub-panel`
 | | `togglePanel(panel)` | ❌ |
 | | `removePanel(panel, options?)` | ❌ |
 | | `removePanelAndRefocus(panel)` | ❌ |
-| **Configuration** | App-wide defaults through `PanelsConfig` | ❌ |
+| **Configuration** | App-wide defaults through `HubPanelsConfig` | ❌ |
 
 ## Panel (`hub-panel`)
 
