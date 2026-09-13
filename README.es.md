@@ -110,6 +110,7 @@ sí mismo.
 
 - **Cuatro visualizaciones** — `tabs`, `pills`, `accordion` y `card`, con un único input `type`.
 - **Tira ligera enlazada a valor** — `<hub-tab-nav>` es una tira de tabs controlada y sin contenido: emite el `value` seleccionado desde un array `items` y te deja renderizar la vista tú mismo (segmented controls, filtros, tabs con contenido externo).
+- **Panel lateral no modal** — `<hub-side-panel>` se acopla a un borde de un `<hub-side-panel-container>` y estrecha el contenido (`side`) o flota sobre su borde (`over`), sin backdrop, bloqueo de scroll ni trampa de foco, así que la página sigue siendo utilizable mientras está abierto.
 - **Layout card y standalone** — `type="card"` renderiza cada panel como una card siempre visible; un único `<hub-panel>` también funciona por sí solo, fuera de cualquier contenedor.
 - **Slots de cabecera/pie de contenido** — `hubPanelHeader` y `hubPanelFooter` marcan bandas de cabecera/pie que se renderizan en todas las vistas (distintas de la etiqueta de navegación `hubPanelHeading`).
 - **Formularios** — implementa `ControlValueAccessor`; vincula el/los panel(es) activo(s) a un `FormControl` o `ngModel` (simple o `multiple`), con `bindValue` y `compareWith`.
@@ -484,6 +485,87 @@ emite el `value` seleccionado; el consumidor renderiza la vista activa por su cu
 | --- | --- | --- |
 | `activeChange` | `unknown` | Se emite con el nuevo valor cuando cambia el tab seleccionado. |
 
+### `<hub-side-panel>` — panel lateral no modal
+
+Un panel acompañante acoplado a un borde lógico de un `<hub-side-panel-container>`: un asistente, un
+inspector, un panel de detalle. `ng-hub-ui-modal` en modo offcanvas es un diálogo: cubre el viewport,
+bloquea el scroll de la página y atrapa el foco. Este panel no hace nada de eso: sin backdrop, sin
+bloqueo de scroll, sin trampa de foco y sin `aria-modal`, así que la página sigue siendo utilizable
+mientras está abierto.
+
+```html
+<hub-side-panel-container class="app-shell">
+	<main>…la página…</main>
+
+	<hub-side-panel #assistant [(open)]="assistantOpen" ariaLabel="Asistente" autoFocus>
+		<header hubSidePanelHeader>
+			Asistente
+			<button type="button" (click)="assistant.close()">Cerrar</button>
+		</header>
+		<app-chat-thread />
+		<footer hubSidePanelFooter><textarea autofocus></textarea></footer>
+	</hub-side-panel>
+</hub-side-panel-container>
+```
+
+```css
+.app-shell {
+	height: 100dvh; /* el área de contenido hace scroll dentro del contenedor */
+}
+```
+
+- **Dos modos.** `mode="side"` (por defecto) acopla el panel y estrecha el contenido para hacerle
+  sitio. `mode="over"` lo hace flotar sobre el borde del contenido; solo deja de ser clicable la franja
+  que tapa.
+- **Respaldo responsive.** Por debajo de `breakpoint` (por defecto `768`, medido sobre el contenedor,
+  no sobre el viewport) un panel `side` se renderiza como `over`, porque un panel acoplado en un móvil
+  aplastaría el contenido. `breakpoint="0"` lo mantiene acoplado. `effectiveMode()` indica cuál se está
+  renderizando.
+- **Borde lógico.** `position` es `'end'` (por defecto) o `'start'`, así que con `dir="rtl"` un panel
+  `end` pasa a la izquierda.
+- **El estado sobrevive al cierre.** Cerrar nunca destruye el contenido proyectado: el panel se oculta
+  (`inert` al momento, `visibility: hidden` al terminar el deslizamiento) y vuelve a mostrarse tal como
+  estaba, así que un chat conserva su conversación y su borrador. Envuelve el contenido en
+  `@if (assistant.open())` si quieres que se destruya al cerrar.
+- **Foco.** Al abrir no se mueve nada salvo con `autoFocus` (entonces al primer elemento `[autofocus]`,
+  si no al primero tabulable, si no al propio panel). Si se cierra con el foco dentro, vuelve a donde
+  estaba cuando se abrió el panel. Escape pulsado dentro del panel lo cierra (`closeOnEscape`); el
+  Escape pulsado en la página no se toca.
+- **Layout.** Los paneles son hijos directos del contenedor. Dale al contenedor un alto; usa
+  `container-type: inline-size`, así que en una fila flex dale `flex: 1` o un ancho. Un panel con el
+  atributo estático `position="start"` se proyecta antes del contenido, de modo que el orden de
+  tabulación sigue al visual; un `[position]` enlazado se coloca solo por CSS.
+- **Slots.** `hubSidePanelHeader` y `hubSidePanelFooter` son atributos simples, sin nada que importar;
+  todo lo demás va al cuerpo con scroll. Un slot vacío no renderiza nada.
+- **Estilos.** Los tokens `--hub-side-panel-*` (ancho, colores, borde, sombra, z-index, padding,
+  transición) se leen en el punto de uso, así que se pueden fijar en el panel, en el contenedor o en
+  cualquier ancestro. Ver [`docs/css-variables-reference.md`](./docs/css-variables-reference.md#side-panel-hub-side-panel).
+
+`<hub-side-panel-container>` no tiene inputs. Su signal `inlineSize` contiene el ancho medido en px
+(`null` antes de la primera medición y en el servidor).
+
+| Input | Tipo | Por defecto | Descripción |
+| --- | --- | --- | --- |
+| `mode` | `HubSidePanelMode` (`'side' \| 'over'`) | `'side'` | Acoplado junto al contenido, o flotando sobre su borde. |
+| `position` | `HubSidePanelPosition` (`'start' \| 'end'`) | `'end'` | Borde lógico del contenedor. |
+| `open` | `boolean` (model) | `false` | Estado de apertura bidireccional; `openChange` se emite al cambiar. |
+| `closeOnEscape` | `boolean` | `true` | Escape pulsado dentro del panel lo cierra. |
+| `breakpoint` | `number` | `768` | Ancho del contenedor (px) por debajo del cual `side` pasa a `over`; `0` desactiva el respaldo. |
+| `autoFocus` | `boolean` | `false` | Mueve el foco dentro del panel al abrir. |
+| `role` | `HubSidePanelRole` (`'complementary' \| 'region'`) | `'complementary'` | Rol de landmark; `'region'` para un panel dentro de `<main>`. |
+| `ariaLabel` | `string` | — | Nombre accesible del landmark. |
+| `ariaLabelledBy` | `string` | — | Id del elemento que da nombre al landmark. |
+
+| Output | Payload | Descripción |
+| --- | --- | --- |
+| `openChange` | `boolean` | Mitad de cambio del model `open`; se emite con el nuevo estado, lo cambie quien lo cambie. |
+
+| Miembro | Firma | Descripción |
+| --- | --- | --- |
+| `toggle` | `(force?: boolean) => void` | Abre o cierra el panel; `true` / `false` fuerzan un estado. |
+| `close` | `() => void` | Cierra el panel y devuelve el foco si estaba dentro. |
+| `effectiveMode` | `Signal<HubSidePanelMode>` | El modo que se renderiza de verdad, tras aplicar el respaldo del breakpoint. |
+
 ### Directivas
 
 - `hubPanelHeading` — marca un `<ng-template>` dentro de un `hub-panel` como su cabecera **de navegación** (enlace de tab/pill o botón de disclosure del accordion).
@@ -566,6 +648,7 @@ se sigue ajustando como custom property `--hub-panels-*`.
 - `tabs` / `pills`: `role="tablist"`, `role="tab"`, `role="tabpanel"`, tabindex móvil y `aria-selected`.
 - `accordion`: un botón de disclosure por panel con `aria-expanded` / `aria-controls` y una región colapsada inerte.
 - Teclado: Flecha, Home y End mueven el foco; Delete elimina un panel `removable`; Enter/Espacio alternan las cabeceras de accordion.
+- Panel lateral: un landmark `complementary` (o `region`) con nombre, nunca un diálogo — sin `aria-modal` ni trampa de foco. Un panel cerrado es `inert`; el foco entra al abrir solo con `autoFocus`, y vuelve a donde estaba cuando el panel se cierra con el foco dentro.
 
 ---
 

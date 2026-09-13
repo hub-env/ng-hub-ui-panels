@@ -9,6 +9,8 @@ export { HubPanelFooterDirective } from './lib/directives/panel-footer.directive
 export { HubPanelComponent } from './lib/components/panel/panel.component';
 export { HubPanelsComponent } from './lib/components/panels/panels.component';
 export { HubTabNavComponent } from './lib/components/tab-nav/tab-nav.component';
+export { HubSidePanelContainerComponent } from './lib/components/side-panel/side-panel-container.component';
+export { HubSidePanelComponent } from './lib/components/side-panel/side-panel.component';
 export { HubPanelsConfig } from './lib/services/panels-config.service';
 export type {
 	HubPanelAppearance,
@@ -18,6 +20,7 @@ export type {
 	PanelsType
 } from './lib/models/panels.types';
 export type { HubTabNavAppearance, HubTabNavItem } from './lib/components/tab-nav/tab-nav.types';
+export type { HubSidePanelMode, HubSidePanelPosition, HubSidePanelRole } from './lib/components/side-panel/side-panel.types';
 
 // ─── Deprecated aliases ───────────────────────────────────────────────────────
 // Every class in the family carries the `Hub` prefix, so a consumer importing several

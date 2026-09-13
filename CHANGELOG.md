@@ -5,6 +5,32 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.12.0] - 2026-09-13
+
+### Added
+
+- **`<hub-side-panel>` inside a `<hub-side-panel-container>`: a non-modal side panel.** The only drawer in
+  the family was `ng-hub-ui-modal` with `offcanvas`, and that is a dialog: it covers the viewport with a
+  fixed layer, locks the body scroll, traps focus and sets `aria-modal`, so the page behind it cannot be
+  used while it is open. That is right for a task that has to be finished first and wrong for a companion
+  that lives beside the page — an assistant filling in the form the person is on, an inspector, a detail
+  pane. The new panel has no backdrop, no scroll lock and no focus trap. `mode="side"` docks it and narrows
+  the content to make room; `mode="over"` floats it over the content edge and leaves the rest of the page
+  clickable and scrollable. Below `breakpoint` (default `768`, measured on the container rather than the
+  viewport) a `side` panel falls back to `over`, since a docked panel on a phone would leave the content a
+  sliver; `effectiveMode()` reports which one is rendered and `breakpoint="0"` keeps it docked.
+  `position` is logical (`'start' | 'end'`), `open` is a two-way model, `closeOnEscape` closes on Escape
+  pressed inside the panel only, and `autoFocus` opts into moving focus in on open; closing with focus
+  inside hands it back to where it was. Closing hides the panel (`inert` at once, `visibility: hidden`
+  once the slide ends) and never destroys the projected content, so a chat keeps its thread and its draft.
+  The landmark is `role="complementary"` by default (`role="region"` for a panel nested in `<main>`),
+  named through `ariaLabel` or `ariaLabelledBy`. Header and footer bands project through the
+  `hubSidePanelHeader` / `hubSidePanelFooter` attributes. Opening and closing slide on a logical margin,
+  so they are right under `dir="rtl"`, and `prefers-reduced-motion` turns the slide off. Themed through
+  twelve `--hub-side-panel-*` tokens read at the point of use, so they can be set on the panel, the
+  container or any ancestor. New exported types: `HubSidePanelMode`, `HubSidePanelPosition` and
+  `HubSidePanelRole`. Nothing existing changes.
+
 ## [22.11.0] - 2026-09-08
 
 ### Changed

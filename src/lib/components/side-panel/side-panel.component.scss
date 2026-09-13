@@ -1,0 +1,115 @@
+// ─────────────────────────────────────────────────────────────────────────
+// `<hub-side-panel>` — non-modal panel docked to one edge of its container
+// ─────────────────────────────────────────────────────────────────────────
+//
+// Tokens are read at the point of use with their default as the `var()` fallback and are never
+// declared on the host. A declaration on the host would beat any value inherited from an ancestor,
+// so `.app-shell { --hub-side-panel-width: 28rem }` on the container would silently do nothing;
+// read this way, the token can be set on the panel, the container or any ancestor.
+//
+// Open/close is one mechanism for both modes: the panel keeps its width, and while closed a
+// negative margin on its outer edge (`margin-inline-end` for an end panel) pushes it past the
+// container edge, where the container clips it. In the docked row
+// that margin also cancels the space the panel takes, so animating it to zero narrows the content
+// and slides the panel in within the same frames. `visibility` flips only once the slide ends, so
+// the closed panel stops painting (and its shadow stops bleeding into the content) without cutting
+// the animation short.
+
+$width: min(var(--hub-side-panel-width, 24rem), 100cqi);
+$border: var(--hub-side-panel-border-width, var(--hub-ref-border-width, 1px)) solid
+	var(--hub-side-panel-border-color, var(--hub-sys-border-color-default, #dee2e6));
+$duration: var(--hub-side-panel-transition-duration, var(--hub-sys-transition-duration-base, 260ms));
+$easing: var(--hub-side-panel-transition-easing, var(--hub-sys-transition-timing-function-base, ease));
+$padding-y: var(--hub-side-panel-padding-y, var(--hub-ref-space-3, 1rem));
+$padding-x: var(--hub-side-panel-padding-x, var(--hub-ref-space-3, 1rem));
+$slide:
+	margin-inline-start $duration $easing,
+	margin-inline-end $duration $easing;
+
+:host {
+	position: relative;
+	display: flex;
+	flex: 0 0 auto;
+	flex-direction: column;
+	order: 1;
+	box-sizing: border-box;
+	inline-size: $width;
+	min-block-size: 0;
+	margin-inline-end: calc(-1 * #{$width});
+	visibility: hidden;
+	color: var(--hub-side-panel-color, var(--hub-sys-text-primary, #212529));
+	background: var(--hub-side-panel-bg, var(--hub-sys-surface-page, #fff));
+	border-inline-start: $border;
+	transition:
+		$slide,
+		visibility 0s linear $duration;
+}
+
+:host(.hub-side-panel--start) {
+	order: -1;
+	margin-inline-end: 0;
+	margin-inline-start: calc(-1 * #{$width});
+	border-inline-start: 0;
+	border-inline-end: $border;
+}
+
+:host(.hub-side-panel--over) {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-end: 0;
+	// Local to the container, which isolates its stacking context: the panel only has to beat the
+	// page content, which the container keeps at level 0.
+	z-index: var(--hub-side-panel-zindex, 1);
+	box-shadow: var(--hub-side-panel-box-shadow, var(--hub-sys-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175)));
+}
+
+:host(.hub-side-panel--over.hub-side-panel--start) {
+	inset-inline-start: 0;
+	inset-inline-end: auto;
+}
+
+// After the position rules on purpose: same specificity, and `open` has to win the margin.
+:host(.hub-side-panel--open) {
+	margin-inline: 0;
+	visibility: visible;
+	transition:
+		$slide,
+		visibility 0s linear 0s;
+}
+
+:host(:focus-visible) {
+	outline-offset: -2px;
+}
+
+.hub-side-panel__header,
+.hub-side-panel__footer {
+	flex: 0 0 auto;
+	padding: $padding-y $padding-x;
+
+	// A slot nobody filled renders nothing, instead of an empty padded band with a border.
+	&:empty {
+		display: none;
+	}
+}
+
+.hub-side-panel__header {
+	border-block-end: $border;
+}
+
+.hub-side-panel__footer {
+	border-block-start: $border;
+}
+
+.hub-side-panel__body {
+	flex: 1 1 auto;
+	min-block-size: 0;
+	overflow: auto;
+	padding: var(--hub-side-panel-body-padding, #{$padding-y $padding-x});
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:host,
+	:host(.hub-side-panel--open) {
+		transition: none;
+	}
+}

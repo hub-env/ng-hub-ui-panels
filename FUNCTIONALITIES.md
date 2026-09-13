@@ -2,7 +2,7 @@
 
 This table details the functionalities of the `ng-hub-ui-panels` library and indicates which ones are covered by interactive examples.
 
-The library ships three components — `hub-panels` (the container), `hub-panel` (a pane, or a standalone card / alert) and `hub-tab-nav` (a content-less value-bound strip) — plus four content-projection directives.
+The library ships five components — `hub-panels` (the container), `hub-panel` (a pane, or a standalone card / alert), `hub-tab-nav` (a content-less value-bound strip), and `hub-side-panel` with its layout parent `hub-side-panel-container` (a non-modal side panel) — plus four content-projection directives.
 
 ## Container (`hub-panels`)
 
@@ -73,6 +73,23 @@ The library ships three components — `hub-panels` (the container), `hub-panel`
 | **Appearance** | Underlined tabs or rounded pills (`appearance`) | ✅ |
 | | Equal-width tabs (`justified`) | ✅ |
 | | Vertical strip (`vertical`) | ❌ |
+
+## Side panel (`hub-side-panel`)
+
+| Category | Functionality | Example Covered |
+| :--- | :--- | :---: |
+| **Modes** | Docked beside the content, which narrows (`mode="side"`) | ✅ |
+| | Floating over the content edge, page still usable (`mode="over"`) | ✅ |
+| | `side` falls back to `over` below the container `breakpoint` | ❌ |
+| **Placement** | Logical edge (`position="start" \| "end"`) | ✅ |
+| **State** | Two-way open state (`open` / `openChange`), `toggle()` / `close()` | ✅ |
+| | Projected content kept alive while closed | ✅ |
+| **Slots** | Header and footer bands (`hubSidePanelHeader` / `hubSidePanelFooter`) | ✅ |
+| **Keyboard & focus** | Escape inside the panel closes it (`closeOnEscape`) | ✅ |
+| | Focus moved in on open (`autoFocus`) and returned on close | ✅ |
+| **Accessibility** | `complementary` landmark named by `ariaLabel` | ✅ |
+| | `role="region"` and `ariaLabelledBy` | ❌ |
+| **Motion** | Logical-margin slide, off under `prefers-reduced-motion` | ✅ |
 
 ## Directives
 

@@ -12,6 +12,7 @@ Use these variables to customize the visual appearance without editing component
 - [Tab Headers](#tab-headers)
 - [Pills](#pills)
 - [Tab Nav (`<hub-tab-nav>`)](#tab-nav-hub-tab-nav)
+- [Side Panel (`<hub-side-panel>`)](#side-panel-hub-side-panel)
 - [Accordion View](#accordion-view)
 - [Card & Content Slots](#card--content-slots)
 - [Customization Examples](#customization-examples)
@@ -111,6 +112,30 @@ is nested in a themed panels subtree, literal fallbacks otherwise).
 | --- | --- |
 | `--hub-tabs-indicator-color` | `var(--hub-panels-accent, var(--hub-sys-color-primary, #0d6efd))` |
 | `--hub-tabs-gap` | `0` |
+
+---
+
+## Side Panel (`<hub-side-panel>`)
+
+Unlike the `--hub-panels-*` tokens, these are **not declared** on the element: each one is read
+where it is used, with its default as the `var()` fallback. A declaration on the panel would beat any
+value inherited from above, so reading them this way is what lets you set them on the panel, on the
+`<hub-side-panel-container>` or on any ancestor (`.app-shell { --hub-side-panel-width: 28rem; }`).
+
+| Variable | Default |
+| --- | --- |
+| `--hub-side-panel-width` | `24rem` (capped at the container's inline size) |
+| `--hub-side-panel-bg` | `var(--hub-sys-surface-page, #fff)` |
+| `--hub-side-panel-color` | `var(--hub-sys-text-primary, #212529)` |
+| `--hub-side-panel-border-width` | `var(--hub-ref-border-width, 1px)` |
+| `--hub-side-panel-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
+| `--hub-side-panel-box-shadow` | `var(--hub-sys-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175))` (`over` only) |
+| `--hub-side-panel-zindex` | `1` (`over` only; local to the container, which isolates its stacking context) |
+| `--hub-side-panel-padding-x` | `var(--hub-ref-space-3, 1rem)` |
+| `--hub-side-panel-padding-y` | `var(--hub-ref-space-3, 1rem)` |
+| `--hub-side-panel-body-padding` | `var(--hub-side-panel-padding-y) var(--hub-side-panel-padding-x)` (`0` for a flush chat) |
+| `--hub-side-panel-transition-duration` | `var(--hub-sys-transition-duration-base, 260ms)` |
+| `--hub-side-panel-transition-easing` | `var(--hub-sys-transition-timing-function-base, ease)` |
 
 ---
 

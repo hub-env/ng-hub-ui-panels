@@ -1,0 +1,41 @@
+// ─────────────────────────────────────────────────────────────────────────
+// `<hub-side-panel-container>` — layout parent of the non-modal side panels
+// ─────────────────────────────────────────────────────────────────────────
+//
+// A flex row: the content area takes whatever the docked panels leave, and the panels (direct
+// children, see side-panel.component.scss) either take their width from that row (`side`) or
+// float over it (`over`). `overflow: hidden` clips a closed panel, which sits just beyond the
+// container edge instead of being removed. `clip` rather than `hidden` where supported: a
+// `hidden` box is still a scroll container, so focusing something inside a panel that is still
+// sliding in would scroll the whole row sideways; a `clip` box cannot be scrolled at all.
+//
+// `container-type: inline-size` lets a panel cap its width at the container (`100cqi`), so an
+// `over` panel never overflows a phone-width container. The trade-off is size containment: the
+// container's width cannot come from its children, so in a flex row it needs `flex: 1` (or a
+// width), exactly like any element that is meant to fill a region.
+//
+// `isolation: isolate` keeps the panel's z-index local. The over panel only has to beat the page
+// content, and a popup the panel itself opens (a select appended to <body>) must still paint
+// above the panel.
+
+:host {
+	position: relative;
+	display: flex;
+	align-items: stretch;
+	box-sizing: border-box;
+	overflow: hidden;
+	overflow: clip;
+	isolation: isolate;
+	container: hub-side-panel-container / inline-size;
+}
+
+.hub-side-panel-container__content {
+	// Its own stacking context at level 0, so a sticky header or positioned element inside the
+	// page, whatever its z-index, stays under an `over` panel.
+	position: relative;
+	z-index: 0;
+	flex: 1 1 auto;
+	order: 0;
+	min-inline-size: 0;
+	overflow: auto;
+}

@@ -108,6 +108,7 @@ its own.
 
 - **Four visualizations** — `tabs`, `pills`, `accordion` and `card`, switched with a single `type` input.
 - **Lightweight value-bound strip** — `<hub-tab-nav>` is a content-less, controlled tab strip: it emits the selected `value` from a plain `items` array and lets you render the view yourself (segmented controls, filter switches, tabs with external content).
+- **Non-modal side panel** — `<hub-side-panel>` docks to one edge of a `<hub-side-panel-container>` and either narrows the content (`side`) or floats over its edge (`over`), with no backdrop, scroll lock or focus trap, so the page stays usable while it is open.
 - **Card layout & standalone** — `type="card"` renders every panel as an always-visible card; a single `<hub-panel>` also works on its own, outside any container.
 - **Content header/footer slots** — `hubPanelHeader` and `hubPanelFooter` mark header/footer bands that render in every view (distinct from the `hubPanelHeading` nav label).
 - **Semantic alerts** — `appearance="alert"` with a `variant` turns a panel into a themed callout (`role="alert"`) driven by the design-system semantic tokens, no per-colour CSS.
@@ -480,6 +481,84 @@ selected `value`; the consumer renders the active view itself.
 | --- | --- | --- |
 | `activeChange` | `unknown` | Emitted with the new value when the selected tab changes. |
 
+### `<hub-side-panel>` — non-modal side panel
+
+A companion panel docked to one inline edge of a `<hub-side-panel-container>`: an assistant, an
+inspector, a detail pane. `ng-hub-ui-modal` in offcanvas mode is a dialog — it covers the viewport,
+locks the page scroll and traps focus. This panel does none of that: no backdrop, no scroll lock, no
+focus trap and no `aria-modal`, so the page stays usable while it is open.
+
+```html
+<hub-side-panel-container class="app-shell">
+	<main>…the page…</main>
+
+	<hub-side-panel #assistant [(open)]="assistantOpen" ariaLabel="Assistant" autoFocus>
+		<header hubSidePanelHeader>
+			Assistant
+			<button type="button" (click)="assistant.close()">Close</button>
+		</header>
+		<app-chat-thread />
+		<footer hubSidePanelFooter><textarea autofocus></textarea></footer>
+	</hub-side-panel>
+</hub-side-panel-container>
+```
+
+```css
+.app-shell {
+	height: 100dvh; /* the content area scrolls inside the container */
+}
+```
+
+- **Two modes.** `mode="side"` (default) docks the panel and narrows the content to make room.
+  `mode="over"` floats it over the content edge; only the strip it covers stops being clickable.
+- **Responsive fallback.** Below `breakpoint` (default `768`, measured on the container, not the
+  viewport) a `side` panel renders as `over`, because a docked panel on a phone would crush the
+  content. `breakpoint="0"` keeps it docked. `effectiveMode()` says which one is rendered.
+- **Logical edge.** `position` is `'end'` (default) or `'start'`, so an end panel moves to the left
+  under `dir="rtl"`.
+- **State survives closing.** Closing never destroys the projected content: the panel is hidden
+  (`inert` at once, `visibility: hidden` once the slide ends) and shown again as it was, so a chat
+  keeps its thread and its draft. Wrap the content in `@if (assistant.open())` if you do want it torn
+  down on close.
+- **Focus.** Nothing moves on open unless `autoFocus` is set (then the first `[autofocus]` element,
+  else the first tabbable one, else the panel). Closing with focus inside returns it to where it was
+  when the panel opened. Escape pressed inside the panel closes it (`closeOnEscape`); Escape pressed on
+  the page is left alone.
+- **Layout.** Panels are direct children of the container. Give the container a block size; it uses
+  `container-type: inline-size`, so in a flex row give it `flex: 1` or a width. A panel with a static
+  `position="start"` attribute is projected before the content, so the tab order follows the visual
+  order; a bound `[position]` is placed by CSS only.
+- **Slots.** `hubSidePanelHeader` and `hubSidePanelFooter` are plain attributes, with nothing to
+  import; everything else goes in the scrolling body. An empty slot renders nothing.
+- **Theming.** `--hub-side-panel-*` tokens (width, colours, border, shadow, z-index, padding,
+  transition) are read at the point of use, so set them on the panel, the container or any ancestor.
+  See [`docs/css-variables-reference.md`](./docs/css-variables-reference.md#side-panel-hub-side-panel).
+
+`<hub-side-panel-container>` takes no inputs. Its `inlineSize` signal holds the measured inline size
+in px (`null` before the first measurement and on the server).
+
+| Input | Type | Default | Description |
+| --- | --- | --- | --- |
+| `mode` | `HubSidePanelMode` (`'side' \| 'over'`) | `'side'` | Docked beside the content, or floating over its edge. |
+| `position` | `HubSidePanelPosition` (`'start' \| 'end'`) | `'end'` | Logical inline edge of the container. |
+| `open` | `boolean` (model) | `false` | Two-way open state; `openChange` fires on change. |
+| `closeOnEscape` | `boolean` | `true` | Escape pressed inside the panel closes it. |
+| `breakpoint` | `number` | `768` | Container inline size (px) below which `side` renders as `over`; `0` disables the fallback. |
+| `autoFocus` | `boolean` | `false` | Moves focus into the panel on open. |
+| `role` | `HubSidePanelRole` (`'complementary' \| 'region'`) | `'complementary'` | Landmark role; `'region'` for a panel inside `<main>`. |
+| `ariaLabel` | `string` | — | Accessible name of the landmark. |
+| `ariaLabelledBy` | `string` | — | Id of the element that names the landmark. |
+
+| Output | Payload | Description |
+| --- | --- | --- |
+| `openChange` | `boolean` | Change half of the `open` model; emitted with the new state, whoever changed it. |
+
+| Member | Signature | Description |
+| --- | --- | --- |
+| `toggle` | `(force?: boolean) => void` | Opens or closes the panel; `true` / `false` force a state. |
+| `close` | `() => void` | Closes the panel, returning focus if it was inside. |
+| `effectiveMode` | `Signal<HubSidePanelMode>` | The mode actually rendered once the breakpoint fallback applies. |
+
 ### Directives
 
 - `hubPanelHeading` — marks an `<ng-template>` inside a `hub-panel` as its custom **navigational** header (tab/pill link or accordion disclosure button).
@@ -562,6 +641,7 @@ still set as a `--hub-panels-*` custom property.
 - `tabs` / `pills`: `role="tablist"`, `role="tab"`, `role="tabpanel"`, roving tabindex and `aria-selected`.
 - `accordion`: a disclosure button per panel with `aria-expanded` / `aria-controls` and an inert collapsed region.
 - Keyboard: Arrow keys, Home, End move focus; Delete removes a `removable` panel; Enter/Space toggle accordion headers.
+- Side panel: a named `complementary` (or `region`) landmark, never a dialog — no `aria-modal`, no focus trap. A closed panel is `inert`; focus moves in on open only with `autoFocus`, and returns to where it was when the panel closes with focus inside.
 
 ---
 
