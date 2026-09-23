@@ -136,10 +136,10 @@ npm install ng-hub-ui-panels
 
 ```json
 {
-	"@angular/common": ">=21.0.0",
-	"@angular/core": ">=21.0.0",
-	"@angular/forms": ">=21.0.0",
-	"@angular/router": ">=21.0.0",
+	"@angular/common": ">=17.2.0",
+	"@angular/core": ">=17.2.0",
+	"@angular/forms": ">=17.2.0",
+	"@angular/router": ">=17.2.0",
 	"ng-hub-ui-ds": ">=22.0.0",
 	"ng-hub-ui-utils": ">=22.7.0"
 }
