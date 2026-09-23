@@ -7,6 +7,23 @@ inside a major line the highest a break can go is a minor, and the notice semant
 in this file. The two entries under 22.8.2 went out in a patch, which is the reason they need writing up more than any
 other entry, not less.
 
+## [22.13.0] - 2026-09-23
+
+### `panels` no longer accepts writes
+
+- **Change**: `HubPanelsComponent.panels` was a `WritableSignal<HubPanelComponent[]>` filled by
+  panels registering themselves. It is now a `computed` derived from a content query, so `set` and
+  `update` are gone from it.
+
+- **Why**: registration order is creation order, and a panel inside an `@if` is created late. That
+  put a conditional tab at the end of the strip however the consumer wrote it. A content query
+  reports the panels in the order they are written, which is the order a reader expects.
+
+- **Impact — reading it is unaffected; writing to it no longer compiles.** Nothing outside the
+  component wrote to it, so this is expected to touch nobody. If you did, the panels are whatever
+  your template declares now: add or remove them there instead. `registerPanel()` still exists and
+  still compiles, but does nothing, and it goes in 23.0.0.
+
 ## [22.11.0] - 2026-09-08
 
 ### The seven exported classes are renamed with the `Hub` prefix
@@ -31,7 +48,7 @@ other entry, not less.
 
 - **What happens if you do nothing**: today, nothing. All seven old names are still exported as
   `@deprecated` aliases resolving to the very same classes, so imports keep compiling, `imports:
-  [...]` arrays keep matching, `viewChild(PanelsComponent)` still finds the container and a
+[...]` arrays keep matching, `viewChild(PanelsComponent)` still finds the container and a
   provider written as `{ provide: PanelsConfig, useValue: { ...new PanelsConfig(), type: 'pills' } }`
   still overrides the defaults — the alias and the new name are one class. They are removed in
   **23.0.0**, the release that moves this family to Angular 23, and that is the version where the
@@ -44,12 +61,7 @@ other entry, not less.
     import { PanelsComponent, PanelComponent, PanelHeadingDirective, PanelsConfig } from 'ng-hub-ui-panels';
 
     // After
-    import {
-    	HubPanelsComponent,
-    	HubPanelComponent,
-    	HubPanelHeadingDirective,
-    	HubPanelsConfig
-    } from 'ng-hub-ui-panels';
+    import { HubPanelsComponent, HubPanelComponent, HubPanelHeadingDirective, HubPanelsConfig } from 'ng-hub-ui-panels';
     ```
 
     A `PanelChangeEvent` handler needs no change; its `current` and `prev` were always the panel

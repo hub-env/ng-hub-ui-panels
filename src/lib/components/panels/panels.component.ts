@@ -1,5 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
+	contentChildren,
 	afterNextRender,
 	booleanAttribute,
 	ChangeDetectionStrategy,
@@ -68,6 +69,8 @@ interface MultipleHeaderGroup {
  * </hub-panels>
  * ```
  */
+import { HUB_PANEL } from '../panel/panel.token';
+
 @Component({
 	selector: 'hub-panels',
 	imports: [NgTemplateOutlet, RouterOutlet],
@@ -182,8 +185,32 @@ export class HubPanelsComponent implements ControlValueAccessor {
 	/** Equality used to match form values against panel values. `===` by default. */
 	readonly compareWith = input<(a: unknown, b: unknown) => boolean>((a, b) => a === b);
 
-	/** Registered panels, in projection order. */
-	readonly panels = signal<HubPanelComponent[]>([]);
+	/**
+	 * Panels projected into this container, in the order the consumer wrote them.
+	 *
+	 * A content query rather than self-registration, because a panel adding itself from its own
+	 * constructor is never seen when it is created inside a control-flow block: an `@if` that turns
+	 * true produced a pane in the DOM and no tab at all. The query also fixes the order for free —
+	 * registration order is creation order, which a conditional panel breaks the moment its
+	 * condition flips.
+	 *
+	 * The boundary is exactly right: content children reach through `@if` and `@for` in the
+	 * consumer's template, and stop at another component's own view, so a panel nested inside a
+	 * component projected into a pane is still not captured as a hidden tab.
+	 */
+	protected readonly projectedPanels = contentChildren(HUB_PANEL, { descendants: true });
+
+	/**
+	 * Panels a consumer removed through the strip's own close button. Removal is an action, not a
+	 * shape the template describes, so it cannot come from the query: the panel is still written in
+	 * the consumer's template and the query keeps returning it.
+	 */
+	readonly #removedPanels = signal<ReadonlySet<HubPanelComponent>>(new Set());
+
+	/** Panels the strip presents, in the order the consumer wrote them. */
+	readonly panels = computed(() =>
+		this.projectedPanels().filter((panel) => !panel.standalone && !this.#removedPanels().has(panel))
+	);
 
 	/** Currently active panel, if any (the first one, under `multiple`). */
 	readonly activePanel = computed(() => this.panels().find((panel) => panel.active()));
@@ -298,21 +325,25 @@ export class HubPanelsComponent implements ControlValueAccessor {
 	}
 
 	/**
-	 * Registers a panel in the container. Called by `HubPanelComponent` on
-	 * construction — not meant for manual use.
+	 * Kept so a panel built against an older release still compiles. Panels are discovered by
+	 * content query now, so joining the container is nothing a panel has to ask for.
+	 *
+	 * @deprecated Does nothing. Removed under this name in **23.0.0**.
 	 */
-	registerPanel(panel: HubPanelComponent): void {
-		this.panels.update((panels) => [...panels, panel]);
-		this.#scheduleSync();
+	registerPanel(_panel: HubPanelComponent): void {
+		// Intentionally empty.
 	}
 
 	/**
-	 * Removes a panel from the container. `reselect` activates the closest
-	 * enabled neighbour when the removed panel was active; `emit` fires the
-	 * panel's `removed` output.
+	 * Removes a panel from the container. `reselect` activates the closest enabled neighbour when
+	 * the removed panel was active; `emit` fires the panel's `removed` output; `track` records the
+	 * removal so the content query stops presenting the panel.
+	 *
+	 * A panel on its way out of the DOM passes `track: false`: the query drops it by itself, and
+	 * remembering it would hold the reference alive for nothing.
 	 */
-	removePanel(panel: HubPanelComponent, options: { reselect?: boolean; emit?: boolean } = {}): void {
-		const { reselect = true, emit = true } = options;
+	removePanel(panel: HubPanelComponent, options: { reselect?: boolean; emit?: boolean; track?: boolean } = {}): void {
+		const { reselect = true, emit = true, track = true } = options;
 		const panels = this.panels();
 		const index = panels.indexOf(panel);
 		if (index === -1 || this.#isDestroyed) {
@@ -329,7 +360,16 @@ export class HubPanelsComponent implements ControlValueAccessor {
 			panel.removed.emit(panel);
 		}
 
-		this.panels.update((currentPanels) => currentPanels.filter((candidate) => candidate !== panel));
+		if (track) {
+			// Prune as we go: a panel removed and then destroyed would otherwise stay in the set for
+			// the lifetime of the container.
+			this.#removedPanels.update((current) => {
+				const live = new Set(this.projectedPanels());
+				const next = new Set([...current].filter((candidate) => live.has(candidate)));
+				next.add(panel);
+				return next;
+			});
+		}
 
 		// Detach the projected pane: the consumer template still owns the node,
 		// so removing the header alone would leave the pane content behind.

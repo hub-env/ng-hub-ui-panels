@@ -5,6 +5,37 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.13.0] - 2026-09-23
+
+### Fixed
+
+- **A panel written inside an `@if` now sits where the template puts it, instead of last.** The
+  strip was built from panels adding themselves in their own constructor, which made the order on
+  screen the order the panels happened to be created. A conditional panel is created when its
+  condition turns true, so it landed after every unconditional one — written second, drawn fourth —
+  and went back to the end every time the condition flipped. Nothing about it was intermittent:
+  a condition that was true from the first render produced the wrong order too. The tab strip is
+  read in order and the arrow keys walk it in order, so both were wrong together.
+
+### Changed
+
+- **The container discovers its panels rather than waiting to be told.** `HubPanelsComponent` now
+  finds them with a content query, which reports them in the order the consumer wrote them and
+  reaches through `@if` and `@for`. The boundary is the one that was wanted all along: content
+  children stop at another component's own view, so a panel nested inside a component projected
+  into a pane is still not captured as a hidden tab, and the guard that pins that behaviour is
+  untouched.
+- **BREAKING — `panels` is a computed signal, not a writable one.** It is derived from the content
+  query, so it has no `set` or `update`. Nothing in this package wrote to it from outside, and a
+  consumer reading it is unaffected. See `BREAKING_CHANGES.md`.
+- **`registerPanel()` does nothing and is deprecated.** Panels no longer announce themselves. The
+  method is kept so code built against an older release still compiles, and goes in **23.0.0**.
+
+### Added
+
+- **`HUB_PANEL`**, the token a panel provides itself under. It exists so the container can query
+  its panels without importing the panel class, which would close a cycle between the two.
+
 ## [22.12.2] - 2026-09-23
 
 ### Changed
@@ -165,7 +196,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **The ✕ remove control was invisible to assistive technologies and unreachable by keyboard.** It rendered as an `aria-hidden` `<span>` with a click handler, nested *inside* the tab / disclosure `<button>` — unfocusable, unannounced and inoperable without a mouse (only the undiscoverable Delete key removed a panel). It is now a real `<button type="button">` with an `aria-label`, rendered as a **sibling** of the header control through the same slot pattern `hubPanelHeadingActions` introduced: in the strip views it follows the tab button inside `.hub-panels__nav-item` and overlays the tab's reserved end padding, so it keeps its visual spot inside the tab chrome (the tab reserves `1em` + `--hub-panels-tab-gap` instead of the glyph's intrinsic width — removable tabs may measure a few pixels wider, and in `justified` / stretched-`vertical` strips the ✕ now pins to the tab's end edge rather than trailing the label); in the accordion view it renders inside `.hub-panels__accordion-actions` at the row's end, before the chevron gutter (it sat beside the heading text before — unavoidable, a sibling control cannot occupy the middle of the disclosure button). Clicking it still removes without toggling or selecting; it is disabled together with its panel. The `.hub-panels__remove-btn` class is unchanged, so the `--hub-panels-remove-btn-opacity(-hover)` overrides keep working, and the button now shows the shared focus ring (`--hub-panels-tab-focus-ring-width/-color`). Because the ✕ no longer sits inside the header control it stopped inheriting its text colour, so it now mirrors those states explicitly — tab base / hover / active (`--hub-panels-tab-color(-hover/-active)`), active pill (`--hub-panels-pill-color-active`), accordion collapsed / expanded (`--hub-panels-accordion-btn-color` / `--hub-panels-accordion-active-color`) and disabled (`--hub-panels-tab-color-disabled`). The tablist roving `tabindex` is untouched — the ✕ is a plain tab stop after its tab, never a `role="tab"`.
+- **The ✕ remove control was invisible to assistive technologies and unreachable by keyboard.** It rendered as an `aria-hidden` `<span>` with a click handler, nested _inside_ the tab / disclosure `<button>` — unfocusable, unannounced and inoperable without a mouse (only the undiscoverable Delete key removed a panel). It is now a real `<button type="button">` with an `aria-label`, rendered as a **sibling** of the header control through the same slot pattern `hubPanelHeadingActions` introduced: in the strip views it follows the tab button inside `.hub-panels__nav-item` and overlays the tab's reserved end padding, so it keeps its visual spot inside the tab chrome (the tab reserves `1em` + `--hub-panels-tab-gap` instead of the glyph's intrinsic width — removable tabs may measure a few pixels wider, and in `justified` / stretched-`vertical` strips the ✕ now pins to the tab's end edge rather than trailing the label); in the accordion view it renders inside `.hub-panels__accordion-actions` at the row's end, before the chevron gutter (it sat beside the heading text before — unavoidable, a sibling control cannot occupy the middle of the disclosure button). Clicking it still removes without toggling or selecting; it is disabled together with its panel. The `.hub-panels__remove-btn` class is unchanged, so the `--hub-panels-remove-btn-opacity(-hover)` overrides keep working, and the button now shows the shared focus ring (`--hub-panels-tab-focus-ring-width/-color`). Because the ✕ no longer sits inside the header control it stopped inheriting its text colour, so it now mirrors those states explicitly — tab base / hover / active (`--hub-panels-tab-color(-hover/-active)`), active pill (`--hub-panels-pill-color-active`), accordion collapsed / expanded (`--hub-panels-accordion-btn-color` / `--hub-panels-accordion-active-color`) and disabled (`--hub-panels-tab-color-disabled`). The tablist roving `tabindex` is untouched — the ✕ is a plain tab stop after its tab, never a `role="tab"`.
 - **Removing a panel through the ✕ strands keyboard focus no more.** Removal through the button (all views) now returns focus to the closest remaining header, exactly like the Delete key always did, instead of letting it fall back to `<body>`. Exposed as the public `removePanelAndRefocus(panel)` method on `PanelsComponent`, which the Delete-key handlers now share.
 
 ## [22.8.3] - 2026-07-26
@@ -179,7 +210,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **The hairline closing an expanded row stopped short of the row's end.** It was an inset `box-shadow` on the disclosure button, which spanned the whole header until 22.8.0 made it `flex: 1 1 auto` to free space for `hubPanelHeadingActions`. With actions present the line ended where they began. It is now drawn on `.hub-panels__accordion-header--expanded`, which always spans the full row, with or without actions.
-- **`togglePosition="end"` put the chevron at the end of the BUTTON, not of the row.** With `hubPanelHeadingActions` the chevron therefore landed *between* the heading and the affordances. The trailing chevron is now anchored to the header's inline end (`position: absolute; inset-inline-end`), so `'end'` means the end of the row, as documented. It remains a child of the disclosure button — clicking it still toggles, and no control is nested inside another. Whatever sits last in the row (the heading, or the actions when present) reserves the glyph's gutter through the new `--hub-panels-accordion-toggle-gutter` custom property. `togglePosition="start"` is unaffected: the chevron stays in flow, leading the heading. Centring uses `inset-block` + `margin-block` rather than `transform`, which is reserved for the open/closed rotation. Logical properties throughout, so both variants mirror under `dir="rtl"`.
+- **`togglePosition="end"` put the chevron at the end of the BUTTON, not of the row.** With `hubPanelHeadingActions` the chevron therefore landed _between_ the heading and the affordances. The trailing chevron is now anchored to the header's inline end (`position: absolute; inset-inline-end`), so `'end'` means the end of the row, as documented. It remains a child of the disclosure button — clicking it still toggles, and no control is nested inside another. Whatever sits last in the row (the heading, or the actions when present) reserves the glyph's gutter through the new `--hub-panels-accordion-toggle-gutter` custom property. `togglePosition="start"` is unaffected: the chevron stays in flow, leading the heading. Centring uses `inset-block` + `margin-block` rather than `transform`, which is reserved for the open/closed rotation. Logical properties throughout, so both variants mirror under `dir="rtl"`.
 
 ### Changed
 
@@ -294,10 +325,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Aligned with Angular 22.
 - README documentation standardized.
 
-
 ## [21.3.0] - 2026-06-16
 
 ### Added
+
 - New `alert` appearance for a standalone `<hub-panel>`: `<hub-panel appearance="alert" [variant]="…">` renders the panel as a semantic callout (subtle background, subtle border, an accent stripe and emphasis text) with `role="alert"`. Works standalone or inside a `type="card"` container; ignored in the `tabs` / `pills` / `accordion` strip views.
 - New `variant` input on `<hub-panel>` selecting the alert's semantic colour; omit it for a neutral alert. Exported types `HubPanelAppearance` and `HubPanelVariant`. The built-in variants (`primary` / `success` / `danger` / `warning` / `info`) render with the exact design-system tints; **any other string is also accepted** — the alert reads `--hub-sys-color-<variant>` from the host application and derives its look with `color-mix`, so a custom accent palette interconnects with no changes to the library.
 - New tokens for the alert: `--hub-panels-alert-bg`, `--hub-panels-alert-color`, `--hub-panels-alert-border-color`, `--hub-panels-alert-accent`, `--hub-panels-alert-padding-x`, `--hub-panels-alert-padding-y`, `--hub-panels-alert-border-radius`, `--hub-panels-alert-accent-width`. The per-variant colours are not new token sets — each variant re-points the generic alert tokens at the design-system `--hub-sys-color-<variant>-{subtle,border-subtle,emphasis}` family, so the alert inherits every theme and dark mode automatically.
@@ -306,6 +337,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [21.2.0] - 2026-06-14
 
 ### Added
+
 - New `card` visualization (`type="card"`): a chromeless format with no navigation strip where every `<hub-panel>` is always visible and rendered as a card. Ideal for a single standalone panel or a stack of cards.
 - A `<hub-panel>` can now be used **standalone**, outside any `<hub-panels>` container, in which case it renders as a card on its own (the container injection is optional and the card styles ship with the panel component).
 - New content-slot directives `hubPanelHeader` and `hubPanelFooter`: mark an element inside a `<hub-panel>` as the panel's header/footer band. They render in **every** view (`tabs`, `pills`, `accordion`, `card`), distinct from `hubPanelHeading` (the navigational tab/accordion label).
@@ -314,10 +346,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [21.1.1] - 2026-06-12
 
 ### Added
+
 - New token: `--hub-panels-header-bg`, used by the tabs/pills strip background. It defaults to `--hub-panels-content-bg`, so the default theme remains unchanged while custom themes can give the header strip its own surface colour.
 - New token: `--hub-panels-pill-content-border-width`, which controls the bordered card chrome in the `pills` content area.
 
 ### Changed
+
 - The active header background now defaults to `--hub-panels-content-bg`, keeping the active tab/panel fusion aligned automatically when the content surface is rethemed.
 - The `pills` content area is borderless by default (`--hub-panels-pill-content-border-width: 0`); themes can opt back into a bordered card by overriding that token.
 - In `multiple` tabs/pills, every active header now starts its own visible block, each block keeps the same tabs/pills chrome as a regular panel set, and the layout scrolls horizontally when the blocks exceed the available width.
@@ -332,15 +366,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [21.1.0] - 2026-06-11
 
 ### Added
+
 - Multiple selection in the `tabs` / `pills` views: with `multiple`, several panels can be open at once. Each open pane becomes its own bordered box placed next to the others — side by side when the strip is horizontal, stacked when it is `vertical` — sharing the space with a per-pane minimum and scrolling on overflow. The form value is an array.
 - New tokens: `--hub-panels-pane-min-width`, `--hub-panels-pane-min-height`, `--hub-panels-pane-gap`, `--hub-panels-nav-content-gap`, `--hub-panels-pill-gap`.
 
 ### Fixed
+
 - **Accordion content was not rendered.** The panel template used two unselected `<ng-content>` slots (one per `@if`/`@else` branch); Angular bound projection to the strip-view slot, so the accordion body was always empty. Replaced with a single projection slot, fixing the missing accordion content.
 - `tabs` and vertical `tabs` now render as a **single bordered box** around the strip and the content together (one outer border plus an internal divider), instead of two separate boxes. The active tab merges into the content across the divider.
 - `pills` view gains spacing between the strip and a bordered content card (`--hub-panels-nav-content-gap`).
 
 ### Changed
+
 - The header strip now scrolls smoothly (`scroll-behavior: smooth`).
 - Disabled headers show the `not-allowed` cursor.
 - `<hub-panels>` now always spans 100% of its parent's width and applies `box-sizing: border-box`.
@@ -348,6 +385,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [21.0.0] - 2026-06-11
 
 ### Added
+
 - Initial release of `ng-hub-ui-panels`.
 - `<hub-panels>` container with three visualizations selected by the `type` input: `tabs` (default), `pills` and `accordion`.
 - `<hub-panel>` content panes with `heading`, `value`, `active` (two-way), `disabled`, `removable`, `customClass`, `routerLink`, `queryParams` and `pathMatch` inputs.
@@ -361,4 +399,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full `--hub-panels-*` CSS custom-property theming, with the accordion view falling back to the `--hub-accordion-*` token contract for compatibility.
 
 ### Notes
+
 - `ng-hub-ui-panels` supersedes `ng-hub-ui-accordion`. The accordion view is a drop-in, more capable replacement for `<hub-accordion>`.

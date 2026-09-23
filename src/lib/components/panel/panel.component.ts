@@ -1,5 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import {
+	forwardRef,
 	booleanAttribute,
 	ChangeDetectionStrategy,
 	Component,
@@ -50,8 +51,11 @@ let nextPanelId = 0;
  * </hub-panels>
  * ```
  */
+import { HUB_PANEL } from './panel.token';
+
 @Component({
 	selector: 'hub-panel, [hub-panel]',
+	providers: [{ provide: HUB_PANEL, useExisting: forwardRef(() => HubPanelComponent) }],
 	exportAs: 'hubPanel',
 	imports: [NgTemplateOutlet],
 	templateUrl: './panel.component.html',
@@ -331,7 +335,7 @@ export class HubPanelComponent implements OnDestroy {
 
 	ngOnDestroy(): void {
 		if (!this.standalone) {
-			this.tabset?.removePanel(this, { reselect: false, emit: false });
+			this.tabset?.removePanel(this, { reselect: false, emit: false, track: false });
 		}
 	}
 
