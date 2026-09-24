@@ -5,6 +5,47 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.17.0] - 2026-09-24
+
+### Fixed
+
+- **The strip's `-emphasis` role no longer mixes a pale accent toward the ink.**
+  `--hub-panels-accent-emphasis` was `color-mix(accent 80%, ink)`, and a percentage cannot darken
+  a pale hue: a hovered `warning` tab measured 2.23:1 on its own hover surface, `info` 2.73:1 and
+  `light` 1.56:1, against the 4.5:1 WCAG AA asks of body text. It is now the accent steered into
+  the theme's emphasis window (`--hub-sys-emphasis-lightness-min` / `-max`), which leaves a dark
+  accent alone, pulls a light one down to where it can carry a letter and keeps hue and chroma.
+  The same nine now measure between 6.26:1 and 14.63:1.
+- **A card or an alert built on a custom accent is readable too.** `--hub-panels-card-color`,
+  `--hub-panels-alert-color` and the card band's `--hub-panels-panel-header-color` derived
+  themselves the same way, so the open path — the one a consumer's own `variant` goes through —
+  shipped broken while the nine built-in variants were served correct tints by
+  `--hub-sys-color-*-emphasis`. The info card's band label measured 2.46:1. All four derivations
+  now use the emphasis window, which is what "a custom variant renders exactly like a built-in"
+  was supposed to mean.
+- **The ✕ of a removable tab is an enabled control, so it stops being faded.**
+  `--hub-panels-remove-btn-opacity` rested at `0.6`, which is a de-emphasis and not a disabled
+  state — nothing exempts it from 4.5:1 — and at that strength it measured 2.42:1 on the active
+  tab and 4.18:1 on the others. It now defaults to `1` and reads exactly as contrasty as the tab
+  label it belongs to: 4.50:1 on the active tab, 15.43:1 on the rest.
+
+Colours change visibly — see `BREAKING_CHANGES.md`.
+
+### Added
+
+- **`--hub-side-panel-border-radius` and `--hub-side-panel-inset`.** A side panel could not be
+  rounded or held off the edge of its container without writing CSS against `.hub-side-panel`,
+  which is the internal class the token contract exists to keep private. Both default to `0`, so a
+  panel that sets neither paints exactly as before.
+- **The radius is one token, not one per corner.** Which corners it lands on follows `position`:
+  an `end` panel rounds its inline-start corners and a `start` panel its inline-end ones — the pair
+  facing the content. The pair against the container edge stays square while the panel is flush
+  with it, for the reason `--hub-modal-offcanvas-border-radius` defaults to `0` (a corner rounded
+  against the edge it touches only shows the container through it), and rounds with the rest as
+  soon as `--hub-side-panel-inset` moves the panel off that edge.
+- **The inset is subtracted from the closed position too**, so a panel held off the edge slides
+  fully out of sight instead of leaving a sliver showing while shut.
+
 ## [22.15.0] - 2026-09-23
 
 ### Fixed

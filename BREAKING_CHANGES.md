@@ -7,6 +7,34 @@ inside a major line the highest a break can go is a minor, and the notice semant
 in this file. The two entries under 22.8.2 went out in a patch, which is the reason they need writing up more than any
 other entry, not less.
 
+## [22.17.0] - 2026-09-24
+
+### Every accent-derived label darkens, and the removable tab's ✕ stops being faded
+
+- **Change**: `--hub-panels-accent-emphasis`, `--hub-panels-card-color`,
+  `--hub-panels-alert-color` and `--hub-panels-panel-header-color` are no longer
+  `color-mix(accent 80%, ink)` (85% for the band). Each is now the accent with its lightness
+  steered into the theme's emphasis window,
+  `oklch(from accent clamp(var(--hub-sys-emphasis-lightness-min, 0), l, var(--hub-sys-emphasis-lightness-max, 0.45)) c h)`.
+  Separately, `--hub-panels-remove-btn-opacity` defaults to `1` instead of `0.6`.
+
+- **Why**: a percentage cannot darken a pale hue, so a hovered `warning` tab sat at 2.23:1 and the
+  info card's band label at 2.46:1, under the 4.5:1 WCAG AA asks of body text. The nine built-in
+  variants were already served the corrected tints by the design system's own `-emphasis` tokens,
+  so only the open path a custom accent goes through was still broken. The faded ✕ is an enabled
+  control with an accessible name: 0.6 put it at 2.42:1 on the active tab, and nothing about a
+  de-emphasis exempts it.
+
+- **Impact — the hovered tab, the card body, the card band and the alert all darken**, on every
+  accent and not only the pale ones, and the ✕ of a removable tab reads at full strength. Hue and
+  chroma are untouched, so an amber strip is still amber. A dark accent already inside the window
+  does not move.
+
+- **Migration**: to keep a lighter tone, pin the token you care about
+  (`--hub-panels-accent-emphasis: <your colour>`) or widen the window with
+  `--hub-sys-emphasis-lightness-max`. `--hub-panels-remove-btn-opacity` is still a token and can
+  be lowered again, at the cost of the contrast it was raised for.
+
 ## [22.15.0] - 2026-09-23
 
 ### `<hub-side-panel-container>` is no longer a query container

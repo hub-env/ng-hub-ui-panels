@@ -84,7 +84,7 @@ Used by the `tabs` and `pills` strip headers.
 | `--hub-panels-tab-focus-ring-width` | `var(--hub-sys-focus-ring-width, 0.25rem)` |
 | `--hub-panels-tab-focus-ring-color` | `var(--hub-sys-focus-ring-color, rgba(13, 110, 253, 0.25))` |
 | `--hub-panels-tab-transition` | `var(--hub-sys-transition-base, all 0.2s ease-in-out)` |
-| `--hub-panels-remove-btn-opacity` | `0.6` |
+| `--hub-panels-remove-btn-opacity` | `1` |
 | `--hub-panels-remove-btn-opacity-hover` | `1` |
 
 ---
@@ -129,6 +129,8 @@ value inherited from above, so reading them this way is what lets you set them o
 | `--hub-side-panel-color` | `var(--hub-sys-text-primary, #212529)` |
 | `--hub-side-panel-border-width` | `var(--hub-ref-border-width, 1px)` |
 | `--hub-side-panel-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
+| `--hub-side-panel-border-radius` | `0` (the corners facing the content; the pair against the container edge rounds with `--hub-side-panel-inset`) |
+| `--hub-side-panel-inset` | `0` (gap the panel keeps from the container edges, on all four sides) |
 | `--hub-side-panel-box-shadow` | `var(--hub-sys-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175))` (`over` only) |
 | `--hub-side-panel-zindex` | `1` (`over` only; local to the container, which isolates its stacking context) |
 | `--hub-side-panel-padding-x` | `var(--hub-ref-space-3, 1rem)` |
@@ -136,6 +138,25 @@ value inherited from above, so reading them this way is what lets you set them o
 | `--hub-side-panel-body-padding` | `var(--hub-side-panel-padding-y) var(--hub-side-panel-padding-x)` (`0` for a flush chat) |
 | `--hub-side-panel-transition-duration` | `var(--hub-sys-transition-duration-base, 260ms)` |
 | `--hub-side-panel-transition-easing` | `var(--hub-sys-transition-timing-function-base, ease)` |
+
+`--hub-side-panel-border-radius` is one token, not four: which corners it lands on follows
+`position`, so an `end` panel rounds its inline-start corners and a `start` panel its inline-end
+ones. The corners touching the container edge stay square while the panel is flush against it —
+rounding them there would only show the container through the gap — and round with the rest as
+soon as `--hub-side-panel-inset` moves the panel off the edge:
+
+```css
+/* A panel floating free of the edge, rounded on all four corners. */
+.app-shell {
+	--hub-side-panel-inset: 1rem;
+	--hub-side-panel-border-radius: 0.75rem;
+	/* The single edge border stops short of the rounded corners and reads as a stray line
+	   once the panel touches nothing. A docked panel takes no shadow either
+	   (--hub-side-panel-box-shadow is read in `over` mode only), so what separates a
+	   floating one is the surface behind it. */
+	--hub-side-panel-border-width: 0;
+}
+```
 
 ---
 

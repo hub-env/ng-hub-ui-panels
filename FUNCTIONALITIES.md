@@ -90,6 +90,8 @@ The library ships five components — `hub-panels` (the container), `hub-panel` 
 | **Accessibility**    | `complementary` landmark named by `ariaLabel`                         |       ✅        |
 |                      | `role="region"` and `ariaLabelledBy`                                  |       ❌        |
 | **Motion**           | Logical-margin slide, off under `prefers-reduced-motion`              |       ✅        |
+| **Shape**            | Corner radius by `position` (`--hub-side-panel-border-radius`)        |       ✅        |
+|                      | Gap from the container edges (`--hub-side-panel-inset`)               |       ✅        |
 | **Layout**           | Panel width capped at the container (`100%`, no query container)      |       ❌        |
 |                      | A `position: fixed` descendant still measures from the window         |       ❌        |
 

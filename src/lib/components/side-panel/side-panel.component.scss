@@ -28,6 +28,21 @@ $duration: var(--hub-side-panel-transition-duration, var(--hub-sys-transition-du
 $easing: var(--hub-side-panel-transition-easing, var(--hub-sys-transition-timing-function-base, ease));
 $padding-y: var(--hub-side-panel-padding-y, var(--hub-ref-space-3, 1rem));
 $padding-x: var(--hub-side-panel-padding-x, var(--hub-ref-space-3, 1rem));
+
+// Shape: how round the panel is, and how far it keeps from the edges of its container. Both are
+// `0px` by default, so a panel that sets neither paints exactly as it did before they existed.
+// `0px` and not `0`, because both are read inside `min()` and `calc()`, where a unitless zero is
+// not a length and the whole expression would be dropped as invalid.
+$radius: var(--hub-side-panel-border-radius, 0px);
+$inset: var(--hub-side-panel-inset, 0px);
+
+// Which corners the radius lands on is decided here rather than by a token per corner: the pair
+// facing the content takes it whole, and the pair against the container edge takes as much of it
+// as the gap the panel keeps from that edge allows. Flush (`inset: 0`) they stay square, because a
+// corner rounded against an edge it is touching only shows the container through it — the same
+// reason `--hub-modal-offcanvas-border-radius` defaults to `0`. Once the panel floats free, all
+// four round alike and the one token is still the only dial.
+$outer-radius: min(#{$radius}, #{$inset});
 $slide:
 	margin-inline-start $duration $easing,
 	margin-inline-end $duration $easing;
@@ -41,11 +56,19 @@ $slide:
 	box-sizing: border-box;
 	inline-size: $width;
 	min-block-size: 0;
-	margin-inline-end: calc(-1 * #{$width});
+	// The closed position has to clear the gap as well as the panel, or a panel held off the edge
+	// would leave a sliver of itself showing while shut.
+	margin-block: #{$inset};
+	margin-inline-start: #{$inset};
+	margin-inline-end: calc(-1 * (#{$width} + #{$inset}));
 	visibility: hidden;
 	color: var(--hub-side-panel-color, var(--hub-sys-text-primary, #212529));
 	background: var(--hub-side-panel-bg, var(--hub-sys-surface-page, #fff));
 	border-inline-start: $border;
+	border-start-start-radius: #{$radius};
+	border-end-start-radius: #{$radius};
+	border-start-end-radius: #{$outer-radius};
+	border-end-end-radius: #{$outer-radius};
 	transition:
 		$slide,
 		visibility 0s linear $duration;
@@ -53,10 +76,14 @@ $slide:
 
 :host(.hub-side-panel--start) {
 	order: -1;
-	margin-inline-end: 0;
-	margin-inline-start: calc(-1 * #{$width});
+	margin-inline-end: #{$inset};
+	margin-inline-start: calc(-1 * (#{$width} + #{$inset}));
 	border-inline-start: 0;
 	border-inline-end: $border;
+	border-start-start-radius: #{$outer-radius};
+	border-end-start-radius: #{$outer-radius};
+	border-start-end-radius: #{$radius};
+	border-end-end-radius: #{$radius};
 }
 
 :host(.hub-side-panel--over) {
@@ -76,7 +103,7 @@ $slide:
 
 // After the position rules on purpose: same specificity, and `open` has to win the margin.
 :host(.hub-side-panel--open) {
-	margin-inline: 0;
+	margin-inline: #{$inset};
 	visibility: visible;
 	transition:
 		$slide,

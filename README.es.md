@@ -546,8 +546,8 @@ mientras está abierto.
   visual; un `[position]` enlazado se coloca solo por CSS.
 - **Slots.** `hubSidePanelHeader` y `hubSidePanelFooter` son atributos simples, sin nada que importar;
   todo lo demás va al cuerpo con scroll. Un slot vacío no renderiza nada.
-- **Estilos.** Los tokens `--hub-side-panel-*` (ancho, colores, borde, sombra, z-index, padding,
-  transición) se leen en el punto de uso, así que se pueden fijar en el panel, en el contenedor o en
+- **Estilos.** Los tokens `--hub-side-panel-*` (ancho, colores, borde, radio, separación, sombra,
+  z-index, padding, transición) se leen en el punto de uso, así que se pueden fijar en el panel, en el contenedor o en
   cualquier ancestro. Ver [`docs/css-variables-reference.md`](./docs/css-variables-reference.md#side-panel-hub-side-panel).
 
 `<hub-side-panel-container>` no tiene inputs. Su signal `inlineSize` contiene el ancho medido en px

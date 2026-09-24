@@ -186,7 +186,13 @@
 	// accent slot — same tints the ds `--hub-sys-color-*-subtle/-emphasis`
 	// families ship, so a custom variant renders exactly like a built-in.
 	--hub-panels-alert-bg: color-mix(in oklch, var(--hub-panels-alert-accent) 12%, var(--hub-sys-surface-page, #ffffff));
-	--hub-panels-alert-color: color-mix(in oklch, var(--hub-panels-alert-accent) 80%, var(--hub-sys-color-ink, #212529));
+	// Steered into the theme's emphasis window rather than mixed toward the ink: a percentage
+	// cannot darken a pale accent, so a custom amber or cyan came out unreadable on its own
+	// tint. Same derivation the built-in variants get from `--hub-sys-color-*-emphasis`.
+	--hub-panels-alert-color: oklch(
+		from var(--hub-panels-alert-accent)
+			clamp(var(--hub-sys-emphasis-lightness-min, 0), l, var(--hub-sys-emphasis-lightness-max, 0.45)) c h
+	);
 	--hub-panels-alert-border-color: color-mix(in oklch, var(--hub-panels-alert-accent) 30%, transparent);
 }
 
@@ -225,7 +231,10 @@ $hub-alert-variants: primary, secondary, success, danger, warning, info, neutral
 // token block so it wins (both are zero-specificity `:where`).
 :where(.hub-panels__panel--card[data-variant]) {
 	--hub-panels-card-bg: color-mix(in oklch, var(--hub-panels-card-accent) 12%, var(--hub-sys-surface-page, #ffffff));
-	--hub-panels-card-color: color-mix(in oklch, var(--hub-panels-card-accent) 80%, var(--hub-sys-color-ink, #212529));
+	--hub-panels-card-color: oklch(
+		from var(--hub-panels-card-accent)
+			clamp(var(--hub-sys-emphasis-lightness-min, 0), l, var(--hub-sys-emphasis-lightness-max, 0.45)) c h
+	);
 	--hub-panels-card-border-color: color-mix(in oklch, var(--hub-panels-card-accent) 30%, transparent);
 }
 
@@ -239,7 +248,10 @@ $hub-alert-variants: primary, secondary, success, danger, warning, info, neutral
 // inheritance) so a scoped variant tint never masquerades as the token default.
 :where(.hub-panels__panel--card[data-variant]) :where(.hub-panels__panel-header, .hub-panels__panel-footer) {
 	background: color-mix(in oklch, var(--hub-panels-card-accent) 22%, var(--hub-sys-surface-page, #ffffff));
-	--hub-panels-panel-header-color: color-mix(in oklch, var(--hub-panels-card-accent) 85%, var(--hub-sys-color-ink, #212529));
+	--hub-panels-panel-header-color: oklch(
+		from var(--hub-panels-card-accent)
+			clamp(var(--hub-sys-emphasis-lightness-min, 0), l, var(--hub-sys-emphasis-lightness-max, 0.45)) c h
+	);
 	--hub-panels-panel-header-border-color: color-mix(in oklch, var(--hub-panels-card-accent) 40%, transparent);
 }
 

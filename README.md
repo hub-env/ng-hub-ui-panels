@@ -539,8 +539,8 @@ focus trap and no `aria-modal`, so the page stays usable while it is open.
   placed by CSS only.
 - **Slots.** `hubSidePanelHeader` and `hubSidePanelFooter` are plain attributes, with nothing to
   import; everything else goes in the scrolling body. An empty slot renders nothing.
-- **Theming.** `--hub-side-panel-*` tokens (width, colours, border, shadow, z-index, padding,
-  transition) are read at the point of use, so set them on the panel, the container or any ancestor.
+- **Theming.** `--hub-side-panel-*` tokens (width, colours, border, radius, inset, shadow, z-index,
+  padding, transition) are read at the point of use, so set them on the panel, the container or any ancestor.
   See [`docs/css-variables-reference.md`](./docs/css-variables-reference.md#side-panel-hub-side-panel).
 
 `<hub-side-panel-container>` takes no inputs. Its `inlineSize` signal holds the measured inline size

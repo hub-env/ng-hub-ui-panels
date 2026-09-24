@@ -24,7 +24,19 @@
 	// built-in variant or ANY custom colour, e.g. `--hub-panels-accent: gold`)
 	// re-derives the full role family at runtime.
 	--hub-panels-accent: var(--hub-sys-color-primary, #0d6efd);
-	--hub-panels-accent-emphasis: color-mix(in oklch, var(--hub-panels-accent) 80%, var(--hub-sys-color-ink, #212529));
+	// The emphasis role is what text is painted with — the hovered tab, and every label a
+	// card or an alert derives from a custom accent — so its luminosity is steered rather
+	// than mixed toward the ink. A percentage cannot darken a pale hue: the hovered amber tab
+	// measured 2.23:1 on its own hover surface and the info card's band label 2.46:1. The
+	// theme's emphasis window leaves a dark accent where it is and pulls a light one down to
+	// where it can carry a letter, keeping hue and chroma; a dark theme sets the floor
+	// instead and the same clamp lifts dark accents. It is the derivation the nine built-in
+	// variants already get from `--hub-sys-color-*-emphasis`, so the open path a consumer
+	// reaches with a custom accent now renders exactly like a built-in, as promised above.
+	--hub-panels-accent-emphasis: oklch(
+		from var(--hub-panels-accent)
+			clamp(var(--hub-sys-emphasis-lightness-min, 0), l, var(--hub-sys-emphasis-lightness-max, 0.45)) c h
+	);
 	--hub-panels-accent-subtle: color-mix(in oklch, var(--hub-panels-accent) 12%, var(--hub-sys-surface-page, #ffffff));
 	// Contrast / on-color: text that sits ON the accent (e.g. the active pill).
 	// Grayscale flip driven by the accent's own lightness, recomputed at runtime.
@@ -98,7 +110,12 @@
 	--hub-panels-pill-color-active: var(--hub-panels-accent-on);
 	--hub-panels-pill-gap: var(--hub-ref-space-2, 0.5rem);
 	--hub-panels-pill-content-border-width: 0;
-	--hub-panels-remove-btn-opacity: 0.6;
+	// The ✕ of a removable tab. It used to rest at 0.6, which is a de-emphasis and not a
+	// disabled state: the control is enabled and has an accessible name, so nothing exempts
+	// it from 4.5:1 — and faded it measured 2.42:1 on the active tab and 4.18:1 on the
+	// others. It now rests at full strength, reading exactly as contrasty as the tab label
+	// it belongs to. Lowering it again is a consumer's call, and costs contrast.
+	--hub-panels-remove-btn-opacity: 1;
 	--hub-panels-remove-btn-opacity-hover: 1;
 
 	// Gap between the header strip and the content area (pills view, and the
