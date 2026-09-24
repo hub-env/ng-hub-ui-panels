@@ -7,6 +7,37 @@ inside a major line the highest a break can go is a minor, and the notice semant
 in this file. The two entries under 22.8.2 went out in a patch, which is the reason they need writing up more than any
 other entry, not less.
 
+## [22.15.0] - 2026-09-23
+
+### `<hub-side-panel-container>` is no longer a query container
+
+- **Change**: the host dropped `container: hub-side-panel-container / inline-size`. The panel's
+  width cap, the only thing that used it, is now `min(var(--hub-side-panel-width, 24rem), 100%)`
+  instead of `min(…, 100cqi)`.
+
+- **Why**: `container-type: inline-size` applies layout containment, and a layout-contained box is
+  the containing block for every `position: fixed` descendant. A fullscreen overlay written inside
+  the content area — `<hub-loading mode="fullscreen">`, a cookie banner, a dialog of the
+  consumer's — stopped measuring from the window and covered the content column instead. Nothing
+  in the markup says so, and the workaround products reached for was to move the node to `<body>`
+  by hand. `container-type: size` is not a narrower option: it contains more, not less, and both
+  values create the same containing block. Only not being a query container removes it.
+
+- **Impact — two things change for a consumer who upgrades and does nothing.**
+
+    - A `@container hub-side-panel-container (…)` rule of your own stops matching, silently. The
+      name was never documented as a surface to query, but it was reachable. Rewrite the rule
+      against a query container of your own, declared on an element that holds no fixed layer.
+    - An unsized container now takes its width from its contents. Inline-size containment used to
+      forbid that, which is why the README told you to give the container `flex: 1` or a width;
+      a container that follows that advice is unaffected, and one that never did will now
+      shrink-wrap instead of collapsing.
+    - The cap itself is unchanged except in one corner: `100cqi` measured the content box in both
+      modes, while `100%` measures the content box for a docked panel and the padding box for an
+      `over` one. They differ only if you pad the container, and only by that padding.
+
+- **Migration**: nothing to do unless you wrote a container query against the name.
+
 ## [22.14.0] - 2026-09-23
 
 ### Angular below 17.3.0 is no longer supported

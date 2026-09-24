@@ -5,6 +5,27 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.15.0] - 2026-09-23
+
+### Fixed
+
+- **A `position: fixed` element inside `<hub-side-panel-container>` measures from the window
+  again.** The container declared `container-type: inline-size`, which applies layout containment,
+  and a layout-contained box becomes the containing block for every fixed descendant. Anything
+  meant to cover the screen from inside the content area — a fullscreen loading overlay, a cookie
+  banner, a consumer's own dialog — was sized and placed against the container instead, so it
+  covered the content column and left the rest of the page untouched. Products were working around
+  it by moving the node to `<body>` with a directive of their own.
+
+### Changed
+
+- **BREAKING — the container is no longer a query container.** `container-type` and
+  `container-name` are gone from `<hub-side-panel-container>`, and the panel's width cap is a plain
+  `100%` instead of `100cqi`. The cap resolves against the same box and behaves the same; what
+  changes is that a consumer-written `@container hub-side-panel-container (…)` query stops
+  matching, and an unsized container now takes its width from its contents. See
+  `BREAKING_CHANGES.md`.
+
 ## [22.14.0] - 2026-09-23
 
 ### Changed

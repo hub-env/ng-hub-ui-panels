@@ -9,10 +9,12 @@
 // `hidden` box is still a scroll container, so focusing something inside a panel that is still
 // sliding in would scroll the whole row sideways; a `clip` box cannot be scrolled at all.
 //
-// `container-type: inline-size` lets a panel cap its width at the container (`100cqi`), so an
-// `over` panel never overflows a phone-width container. The trade-off is size containment: the
-// container's width cannot come from its children, so in a flex row it needs `flex: 1` (or a
-// width), exactly like any element that is meant to fill a region.
+// The container is deliberately NOT a query container. `container-type: inline-size` would be the
+// obvious way to let a panel cap its width at the container, but it applies layout containment,
+// and a layout-contained box is the containing block for every `position: fixed` descendant — so a
+// fullscreen overlay written anywhere in the content area measured from this box instead of from
+// the window. The cap is a plain `100%` in side-panel.component.scss, which resolves against this
+// same box and costs nothing.
 //
 // `isolation: isolate` keeps the panel's z-index local. The over panel only has to beat the page
 // content, and a popup the panel itself opens (a select appended to <body>) must still paint
@@ -26,7 +28,6 @@
 	overflow: hidden;
 	overflow: clip;
 	isolation: isolate;
-	container: hub-side-panel-container / inline-size;
 }
 
 .hub-side-panel-container__content {

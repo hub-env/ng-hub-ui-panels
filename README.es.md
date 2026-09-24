@@ -60,6 +60,7 @@ npm install ng-hub-ui-panels
 > ```bash
 > npm install ng-hub-ui-ds
 > ```
+>
 > ```css
 > @import 'ng-hub-ui-ds/styles/tokens/hub-tokens.css';
 > ```
@@ -272,7 +273,10 @@ Una card simple expone tres inputs:
 > **Dos inputs `flush` distintos.** `<hub-panel flush>` (este) pone a `0` el **padding del cuerpo del card** para que el contenido proyectado toque los bordes internos. `<hub-panels flush>` es un input aparte del **contenedor** que, en la vista accordion, quita el **chrome exterior** del accordion (bordes laterales + radio). Distinto elemento, distinta vista, distinto efecto — nunca colisionan.
 
 ```html
-<hub-panel variant="success"><div hubPanelHeader>Success</div> Card teñida.</hub-panel>
+<hub-panel variant="success"
+	><div hubPanelHeader>Success</div>
+	Card teñida.</hub-panel
+>
 
 <hub-panel flush>
 	<div hubPanelHeader>Flush</div>
@@ -415,55 +419,55 @@ Cuando el panel activo está enrutado, el área de contenido renderiza un
 
 ### Inputs de `<hub-panels>`
 
-| Input | Tipo | Por defecto | Descripción |
-| --- | --- | --- | --- |
-| `type` | `'tabs' \| 'pills' \| 'accordion' \| 'card'` | `'tabs'` | Visualización del contenedor. `card` elimina la tira y muestra cada panel como una card. |
-| `vertical` | `boolean` | `false` | Apila la tira junto al contenido (tabs / pills). |
-| `justified` | `boolean` | `false` | Estira las cabeceras a igual ancho. |
-| `scrollable` | `boolean` | `false` | Añade botones de scroll cuando la tira desborda. |
-| `isKeysAllowed` | `boolean` | `true` | Activa la navegación por teclado. |
-| `multiple` | `boolean` | `false` | Accordion: permite varios paneles expandidos a la vez. |
-| `flush` | `boolean` | `false` | Accordion: layout a sangre sin marco exterior. |
-| `togglePosition` | `HubPanelsTogglePosition` (`'start' \| 'end'`) | `'end'` | Accordion: lado de la fila de cabecera en el que se sitúa el chevron (es lógico, así que se refleja en RTL). |
-| `variant` | `HubPanelVariant \| string` | `undefined` | Acento semántico de la tira de navegación (tab activo/hover, pill activa, cabecera de accordion activa). Acepta cualquier string: lee `--hub-sys-color-<variant>`. |
-| `bindValue` | `string` | `undefined` | Ruta dot-notation aplicada al valor de cada panel. |
-| `compareWith` | `(a, b) => boolean` | `===` | Igualdad usada para cotejar valores de formulario. |
+| Input            | Tipo                                           | Por defecto | Descripción                                                                                                                                                        |
+| ---------------- | ---------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`           | `'tabs' \| 'pills' \| 'accordion' \| 'card'`   | `'tabs'`    | Visualización del contenedor. `card` elimina la tira y muestra cada panel como una card.                                                                           |
+| `vertical`       | `boolean`                                      | `false`     | Apila la tira junto al contenido (tabs / pills).                                                                                                                   |
+| `justified`      | `boolean`                                      | `false`     | Estira las cabeceras a igual ancho.                                                                                                                                |
+| `scrollable`     | `boolean`                                      | `false`     | Añade botones de scroll cuando la tira desborda.                                                                                                                   |
+| `isKeysAllowed`  | `boolean`                                      | `true`      | Activa la navegación por teclado.                                                                                                                                  |
+| `multiple`       | `boolean`                                      | `false`     | Accordion: permite varios paneles expandidos a la vez.                                                                                                             |
+| `flush`          | `boolean`                                      | `false`     | Accordion: layout a sangre sin marco exterior.                                                                                                                     |
+| `togglePosition` | `HubPanelsTogglePosition` (`'start' \| 'end'`) | `'end'`     | Accordion: lado de la fila de cabecera en el que se sitúa el chevron (es lógico, así que se refleja en RTL).                                                       |
+| `variant`        | `HubPanelVariant \| string`                    | `undefined` | Acento semántico de la tira de navegación (tab activo/hover, pill activa, cabecera de accordion activa). Acepta cualquier string: lee `--hub-sys-color-<variant>`. |
+| `bindValue`      | `string`                                       | `undefined` | Ruta dot-notation aplicada al valor de cada panel.                                                                                                                 |
+| `compareWith`    | `(a, b) => boolean`                            | `===`       | Igualdad usada para cotejar valores de formulario.                                                                                                                 |
 
 ### Outputs de `<hub-panels>`
 
-| Output | Payload | Descripción |
-| --- | --- | --- |
+| Output        | Payload            | Descripción                                                |
+| ------------- | ------------------ | ---------------------------------------------------------- |
 | `panelChange` | `PanelChangeEvent` | Se emite al abrir un panel distinto (`{ current, prev }`). |
 
 ### Inputs de `<hub-panel>`
 
-| Input | Tipo | Por defecto | Descripción |
-| --- | --- | --- | --- |
-| `heading` | `string` | `undefined` | Cabecera de texto (se ignora con `hubPanelHeading`). |
-| `appearance` | `HubPanelAppearance` (`'card' \| 'alert'`) | `'card'` | Solo en vistas card: card normal o callout semántico `alert`. Se ignora en las vistas tabs / pills / accordion. |
-| `variant` | `HubPanelVariant \| string` | `undefined` | Acento semántico del panel: tiñe toda la card (reflejado como `data-variant`) o colorea el `alert`. Acepta cualquier string: lee `--hub-sys-color-<variant>`. |
-| `flush` | `boolean` | `false` | Solo card: quita el padding del cuerpo para contenido a sangre. |
-| `fill` | `boolean` | `false` | Solo card: ocupa el alto del padre y hace scroll del cuerpo. |
-| `standalone` | atributo | — | Atributo estático: saca un `<hub-panel>` suelto de un `<hub-panels>` ancestro para que renderice como card. |
-| `id` | `string` | auto | Id para el emparejamiento ARIA. |
-| `value` | `unknown` | `id` | Valor aportado al control de formulario. |
-| `active` | `boolean` (model) | `false` | Estado activo/expandido bidireccional. |
-| `disabled` | `boolean` | `false` | Impide la activación. |
-| `removable` | `boolean` | `false` | Muestra una ✕ y habilita la tecla Delete. |
-| `removeLabel` | `string` | `'Remove panel'` | Nombre accesible (`aria-label`) del botón ✕; sobrescríbelo para localizarlo. |
-| `routerLink` | `string \| string[]` | `undefined` | Convierte el panel en un panel enrutado. |
-| `queryParams` | `Params` | `undefined` | Query params para `routerLink`. |
-| `pathMatch` | `'route' \| 'full'` | `'route'` | Comparación de URL para paneles enrutados. |
-| `customClass` | `string` | `undefined` | Clases extra en el nav item y el panel. |
+| Input         | Tipo                                       | Por defecto      | Descripción                                                                                                                                                   |
+| ------------- | ------------------------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `heading`     | `string`                                   | `undefined`      | Cabecera de texto (se ignora con `hubPanelHeading`).                                                                                                          |
+| `appearance`  | `HubPanelAppearance` (`'card' \| 'alert'`) | `'card'`         | Solo en vistas card: card normal o callout semántico `alert`. Se ignora en las vistas tabs / pills / accordion.                                               |
+| `variant`     | `HubPanelVariant \| string`                | `undefined`      | Acento semántico del panel: tiñe toda la card (reflejado como `data-variant`) o colorea el `alert`. Acepta cualquier string: lee `--hub-sys-color-<variant>`. |
+| `flush`       | `boolean`                                  | `false`          | Solo card: quita el padding del cuerpo para contenido a sangre.                                                                                               |
+| `fill`        | `boolean`                                  | `false`          | Solo card: ocupa el alto del padre y hace scroll del cuerpo.                                                                                                  |
+| `standalone`  | atributo                                   | —                | Atributo estático: saca un `<hub-panel>` suelto de un `<hub-panels>` ancestro para que renderice como card.                                                   |
+| `id`          | `string`                                   | auto             | Id para el emparejamiento ARIA.                                                                                                                               |
+| `value`       | `unknown`                                  | `id`             | Valor aportado al control de formulario.                                                                                                                      |
+| `active`      | `boolean` (model)                          | `false`          | Estado activo/expandido bidireccional.                                                                                                                        |
+| `disabled`    | `boolean`                                  | `false`          | Impide la activación.                                                                                                                                         |
+| `removable`   | `boolean`                                  | `false`          | Muestra una ✕ y habilita la tecla Delete.                                                                                                                     |
+| `removeLabel` | `string`                                   | `'Remove panel'` | Nombre accesible (`aria-label`) del botón ✕; sobrescríbelo para localizarlo.                                                                                  |
+| `routerLink`  | `string \| string[]`                       | `undefined`      | Convierte el panel en un panel enrutado.                                                                                                                      |
+| `queryParams` | `Params`                                   | `undefined`      | Query params para `routerLink`.                                                                                                                               |
+| `pathMatch`   | `'route' \| 'full'`                        | `'route'`        | Comparación de URL para paneles enrutados.                                                                                                                    |
+| `customClass` | `string`                                   | `undefined`      | Clases extra en el nav item y el panel.                                                                                                                       |
 
 ### Outputs de `<hub-panel>`
 
-| Output | Payload | Descripción |
-| --- | --- | --- |
-| `activeChange` | `boolean` | Mitad de cambio del model bidireccional `active`; se emite con el nuevo estado expandido. |
-| `selectPanel` | `HubPanelComponent` | Se emite cuando el panel se activa. |
-| `deselectPanel` | `HubPanelComponent` | Se emite cuando el panel deja de estar activo. |
-| `removed` | `HubPanelComponent` | Se emite al eliminarlo (✕ o Delete). |
+| Output          | Payload             | Descripción                                                                               |
+| --------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| `activeChange`  | `boolean`           | Mitad de cambio del model bidireccional `active`; se emite con el nuevo estado expandido. |
+| `selectPanel`   | `HubPanelComponent` | Se emite cuando el panel se activa.                                                       |
+| `deselectPanel` | `HubPanelComponent` | Se emite cuando el panel deja de estar activo.                                            |
+| `removed`       | `HubPanelComponent` | Se emite al eliminarlo (✕ o Delete).                                                      |
 
 ### `<hub-tab-nav>` — tira ligera enlazada a valor
 
@@ -474,16 +478,16 @@ emite el `value` seleccionado; el consumidor renderiza la vista activa por su cu
 <hub-tab-nav [items]="tabs" [(active)]="selected" appearance="pills" />
 ```
 
-| Input | Tipo | Por defecto | Descripción |
-| --- | --- | --- | --- |
-| `items` | `HubTabNavItem[]` | `[]` | Los tabs seleccionables (`{ value, label, disabled?, id? }`). |
-| `active` | `unknown` (model) | `undefined` | Valor seleccionado bidireccional; `activeChange` se emite al cambiar. |
-| `appearance` | `'tabs' \| 'pills'` | `'tabs'` | Tabs subrayados o pills redondeados. |
-| `justified` | `boolean` | `false` | Estira los tabs a igual ancho. |
-| `vertical` | `boolean` | `false` | Apila la tira en vertical. |
+| Input        | Tipo                | Por defecto | Descripción                                                           |
+| ------------ | ------------------- | ----------- | --------------------------------------------------------------------- |
+| `items`      | `HubTabNavItem[]`   | `[]`        | Los tabs seleccionables (`{ value, label, disabled?, id? }`).         |
+| `active`     | `unknown` (model)   | `undefined` | Valor seleccionado bidireccional; `activeChange` se emite al cambiar. |
+| `appearance` | `'tabs' \| 'pills'` | `'tabs'`    | Tabs subrayados o pills redondeados.                                  |
+| `justified`  | `boolean`           | `false`     | Estira los tabs a igual ancho.                                        |
+| `vertical`   | `boolean`           | `false`     | Apila la tira en vertical.                                            |
 
-| Output | Payload | Descripción |
-| --- | --- | --- |
+| Output         | Payload   | Descripción                                                    |
+| -------------- | --------- | -------------------------------------------------------------- |
 | `activeChange` | `unknown` | Se emite con el nuevo valor cuando cambia el tab seleccionado. |
 
 ### `<hub-side-panel>` — panel lateral no modal
@@ -532,10 +536,14 @@ mientras está abierto.
   si no al primero tabulable, si no al propio panel). Si se cierra con el foco dentro, vuelve a donde
   estaba cuando se abrió el panel. Escape pulsado dentro del panel lo cierra (`closeOnEscape`); el
   Escape pulsado en la página no se toca.
-- **Layout.** Los paneles son hijos directos del contenedor. Dale al contenedor un alto; usa
-  `container-type: inline-size`, así que en una fila flex dale `flex: 1` o un ancho. Un panel con el
-  atributo estático `position="start"` se proyecta antes del contenido, de modo que el orden de
-  tabulación sigue al visual; un `[position]` enlazado se coloca solo por CSS.
+- **Layout.** Los paneles son hijos directos del contenedor. Dale al contenedor un alto y, en una fila
+  flex, `flex: 1` o un ancho: un panel limita su propio ancho al `100%` del contenedor, y eso solo
+  significa algo cuando el contenedor tiene uno. El contenedor **no** es un query container a
+  propósito: `container-type` aplica contención de layout, lo que lo convertiría en el bloque
+  contenedor de todo `position: fixed` que haya dentro, así que una capa a pantalla completa escrita
+  en el área de contenido taparía el contenido y nada más. Un panel con el atributo estático
+  `position="start"` se proyecta antes del contenido, de modo que el orden de tabulación sigue al
+  visual; un `[position]` enlazado se coloca solo por CSS.
 - **Slots.** `hubSidePanelHeader` y `hubSidePanelFooter` son atributos simples, sin nada que importar;
   todo lo demás va al cuerpo con scroll. Un slot vacío no renderiza nada.
 - **Estilos.** Los tokens `--hub-side-panel-*` (ancho, colores, borde, sombra, z-index, padding,
@@ -545,27 +553,27 @@ mientras está abierto.
 `<hub-side-panel-container>` no tiene inputs. Su signal `inlineSize` contiene el ancho medido en px
 (`null` antes de la primera medición y en el servidor).
 
-| Input | Tipo | Por defecto | Descripción |
-| --- | --- | --- | --- |
-| `mode` | `HubSidePanelMode` (`'side' \| 'over'`) | `'side'` | Acoplado junto al contenido, o flotando sobre su borde. |
-| `position` | `HubSidePanelPosition` (`'start' \| 'end'`) | `'end'` | Borde lógico del contenedor. |
-| `open` | `boolean` (model) | `false` | Estado de apertura bidireccional; `openChange` se emite al cambiar. |
-| `closeOnEscape` | `boolean` | `true` | Escape pulsado dentro del panel lo cierra. |
-| `breakpoint` | `number` | `768` | Ancho del contenedor (px) por debajo del cual `side` pasa a `over`; `0` desactiva el respaldo. |
-| `autoFocus` | `boolean` | `false` | Mueve el foco dentro del panel al abrir. |
-| `role` | `HubSidePanelRole` (`'complementary' \| 'region'`) | `'complementary'` | Rol de landmark; `'region'` para un panel dentro de `<main>`. |
-| `ariaLabel` | `string` | — | Nombre accesible del landmark. |
-| `ariaLabelledBy` | `string` | — | Id del elemento que da nombre al landmark. |
+| Input            | Tipo                                               | Por defecto       | Descripción                                                                                    |
+| ---------------- | -------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------- |
+| `mode`           | `HubSidePanelMode` (`'side' \| 'over'`)            | `'side'`          | Acoplado junto al contenido, o flotando sobre su borde.                                        |
+| `position`       | `HubSidePanelPosition` (`'start' \| 'end'`)        | `'end'`           | Borde lógico del contenedor.                                                                   |
+| `open`           | `boolean` (model)                                  | `false`           | Estado de apertura bidireccional; `openChange` se emite al cambiar.                            |
+| `closeOnEscape`  | `boolean`                                          | `true`            | Escape pulsado dentro del panel lo cierra.                                                     |
+| `breakpoint`     | `number`                                           | `768`             | Ancho del contenedor (px) por debajo del cual `side` pasa a `over`; `0` desactiva el respaldo. |
+| `autoFocus`      | `boolean`                                          | `false`           | Mueve el foco dentro del panel al abrir.                                                       |
+| `role`           | `HubSidePanelRole` (`'complementary' \| 'region'`) | `'complementary'` | Rol de landmark; `'region'` para un panel dentro de `<main>`.                                  |
+| `ariaLabel`      | `string`                                           | —                 | Nombre accesible del landmark.                                                                 |
+| `ariaLabelledBy` | `string`                                           | —                 | Id del elemento que da nombre al landmark.                                                     |
 
-| Output | Payload | Descripción |
-| --- | --- | --- |
+| Output       | Payload   | Descripción                                                                                |
+| ------------ | --------- | ------------------------------------------------------------------------------------------ |
 | `openChange` | `boolean` | Mitad de cambio del model `open`; se emite con el nuevo estado, lo cambie quien lo cambie. |
 
-| Miembro | Firma | Descripción |
-| --- | --- | --- |
-| `toggle` | `(force?: boolean) => void` | Abre o cierra el panel; `true` / `false` fuerzan un estado. |
-| `close` | `() => void` | Cierra el panel y devuelve el foco si estaba dentro. |
-| `effectiveMode` | `Signal<HubSidePanelMode>` | El modo que se renderiza de verdad, tras aplicar el respaldo del breakpoint. |
+| Miembro         | Firma                       | Descripción                                                                  |
+| --------------- | --------------------------- | ---------------------------------------------------------------------------- |
+| `toggle`        | `(force?: boolean) => void` | Abre o cierra el panel; `true` / `false` fuerzan un estado.                  |
+| `close`         | `() => void`                | Cierra el panel y devuelve el foco si estaba dentro.                         |
+| `effectiveMode` | `Signal<HubSidePanelMode>`  | El modo que se renderiza de verdad, tras aplicar el respaldo del breakpoint. |
 
 ### Directivas
 
@@ -580,12 +588,12 @@ Obtén el contenedor con `viewChild(HubPanelsComponent)` para manejarlo de forma
 Aparte de estos cuatro, sus miembros públicos son el contrato `ControlValueAccessor` que
 llama Angular y los hooks de registro que usa `<hub-panel>`.
 
-| Método | Firma | Descripción |
-| --- | --- | --- |
-| `selectPanel` | `(panel: HubPanelComponent) => void` | Activa un panel como lo haría un clic: lo marca activo, navega si está enrutado y emite `panelChange`. |
-| `togglePanel` | `(panel: HubPanelComponent) => void` | Alterna un panel en la vista accordion, respetando `multiple`. |
-| `removePanel` | `(panel: HubPanelComponent, options?: { reselect?: boolean; emit?: boolean }) => void` | Elimina un panel del grupo. |
-| `removePanelAndRefocus` | `(panel: HubPanelComponent) => void` | Elimina un panel y pasa el foco de teclado a la cabecera más cercana que quede, de modo que un borrado con Delete nunca deja el foco en el body. |
+| Método                  | Firma                                                                                  | Descripción                                                                                                                                      |
+| ----------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `selectPanel`           | `(panel: HubPanelComponent) => void`                                                   | Activa un panel como lo haría un clic: lo marca activo, navega si está enrutado y emite `panelChange`.                                           |
+| `togglePanel`           | `(panel: HubPanelComponent) => void`                                                   | Alterna un panel en la vista accordion, respetando `multiple`.                                                                                   |
+| `removePanel`           | `(panel: HubPanelComponent, options?: { reselect?: boolean; emit?: boolean }) => void` | Elimina un panel del grupo.                                                                                                                      |
+| `removePanelAndRefocus` | `(panel: HubPanelComponent) => void`                                                   | Elimina un panel y pasa el foco de teclado a la cabecera más cercana que quede, de modo que un borrado con Delete nunca deja el foco en el body. |
 
 ### Configuración
 
@@ -657,13 +665,13 @@ se sigue ajustando como custom property `--hub-panels-*`.
 
 `ng-hub-ui-panels` sustituye a `ng-hub-ui-accordion`. Mapea el marcado así:
 
-| Accordion | Panels |
-| --- | --- |
-| `<hub-accordion [multiple]="true">` | `<hub-panels type="accordion" multiple>` |
-| `<hub-accordion [options]="{ flush: true }">` | `<hub-panels type="accordion" flush>` |
-| `<hub-accordion-panel title="…">` | `<hub-panel heading="…">` |
-| `<ng-template hubAccordionPanelHeader>` | `<ng-template hubPanelHeading>` |
-| `(collapsedChange)` | `(panelChange)` |
+| Accordion                                     | Panels                                   |
+| --------------------------------------------- | ---------------------------------------- |
+| `<hub-accordion [multiple]="true">`           | `<hub-panels type="accordion" multiple>` |
+| `<hub-accordion [options]="{ flush: true }">` | `<hub-panels type="accordion" flush>`    |
+| `<hub-accordion-panel title="…">`             | `<hub-panel heading="…">`                |
+| `<ng-template hubAccordionPanelHeader>`       | `<ng-template hubPanelHeading>`          |
+| `(collapsedChange)`                           | `(panelChange)`                          |
 
 El binding de formularios (`formControl` / `ngModel`, `value`, `bindValue`,
 `compareWith`) funciona igual. Tus overrides de tema `--hub-accordion-*` se siguen aplicando.

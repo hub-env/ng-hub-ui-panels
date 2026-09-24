@@ -15,7 +15,13 @@
 // the closed panel stops painting (and its shadow stops bleeding into the content) without cutting
 // the animation short.
 
-$width: min(var(--hub-side-panel-width, 24rem), 100cqi);
+// Capped at the container so an `over` panel never overflows a phone-width one. `100%` and not
+// `100cqi`: a query container applies layout containment, and a layout-contained box is the
+// containing block for every `position: fixed` descendant, so a fullscreen overlay written
+// anywhere inside the container measured from it instead of from the window. The percentage
+// resolves against the same box — the container's content box for a docked panel, its padding
+// box for an `over` one.
+$width: min(var(--hub-side-panel-width, 24rem), 100%);
 $border: var(--hub-side-panel-border-width, var(--hub-ref-border-width, 1px)) solid
 	var(--hub-side-panel-border-color, var(--hub-sys-border-color-default, #dee2e6));
 $duration: var(--hub-side-panel-transition-duration, var(--hub-sys-transition-duration-base, 260ms));
