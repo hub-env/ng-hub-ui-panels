@@ -257,7 +257,9 @@ describe('panels card view + content header/footer slots', () => {
 
 			const danger = TestBed.createComponent(StandaloneDangerAlertHost);
 			danger.detectChanges();
-			expect((danger.nativeElement.querySelector('.hub-panels__panel') as HTMLElement).getAttribute('role')).toBe('alert');
+			expect((danger.nativeElement.querySelector('.hub-panels__panel') as HTMLElement).getAttribute('role')).toBe(
+				'alert'
+			);
 		});
 
 		it('feeds the accent inline from the variant name (success)', () => {
