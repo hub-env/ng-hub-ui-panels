@@ -294,7 +294,7 @@ Una card simple expone tres inputs:
 Un `<hub-panel>` independiente se convierte en una **alerta** semántica con
 `appearance="alert"` y un `variant`. Cada variante mapea a la familia de tokens
 `--hub-sys-color-<variant>-*` del design system —sin un set de variables por
-color— así que la alerta hereda cada tema y el modo oscuro automáticamente.
+color— así que la alerta hereda cada tema y el modo oscuro automáticamente. Las alertas `danger` y `warning` llevan `role="alert"` y se anuncian al momento; el resto de variantes llevan `role="status"`, y el lector de pantalla las lee sin interrumpir.
 
 ```html
 <hub-panel appearance="alert" variant="success">Tus cambios se han guardado.</hub-panel>

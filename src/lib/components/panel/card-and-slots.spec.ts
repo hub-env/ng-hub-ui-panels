@@ -86,6 +86,13 @@ class CustomVariantAlertHost {}
 class LiteralVariantAlertHost {}
 
 @Component({
+	standalone: true,
+	imports: [HubPanelComponent],
+	template: `<hub-panel appearance="alert" variant="danger">Could not save</hub-panel>`
+})
+class StandaloneDangerAlertHost {}
+
+@Component({
 	selector: 'spec-nested-feature',
 	standalone: true,
 	imports: [HubPanelComponent],
@@ -228,7 +235,7 @@ describe('panels card view + content header/footer slots', () => {
 			expect(success.classList).toContain('hub-panels__panel--alert');
 			expect(success.classList).not.toContain('hub-panels__panel--card');
 			expect(success.getAttribute('data-variant')).toBe('success');
-			expect(success.getAttribute('role')).toBe('alert');
+			expect(success.getAttribute('role')).toBe('status');
 			expect(success.textContent).toContain('Saved successfully');
 		});
 
@@ -239,6 +246,18 @@ describe('panels card view + content header/footer slots', () => {
 			const neutral = fixture.nativeElement.querySelectorAll('.hub-panels__panel')[1] as HTMLElement;
 			expect(neutral.classList).toContain('hub-panels__panel--alert');
 			expect(neutral.getAttribute('data-variant')).toBeNull();
+			expect(neutral.getAttribute('role')).toBe('status');
+		});
+
+		it('announces only danger and warning alerts assertively', () => {
+			const fixture = TestBed.createComponent(CustomVariantAlertHost);
+			fixture.detectChanges();
+			const custom = fixture.nativeElement.querySelector('.hub-panels__panel') as HTMLElement;
+			expect(custom.getAttribute('role')).toBe('status');
+
+			const danger = TestBed.createComponent(StandaloneDangerAlertHost);
+			danger.detectChanges();
+			expect((danger.nativeElement.querySelector('.hub-panels__panel') as HTMLElement).getAttribute('role')).toBe('alert');
 		});
 
 		it('feeds the accent inline from the variant name (success)', () => {

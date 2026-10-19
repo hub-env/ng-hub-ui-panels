@@ -114,7 +114,7 @@ its own.
 - **Non-modal side panel** — `<hub-side-panel>` docks to one edge of a `<hub-side-panel-container>` and either narrows the content (`side`) or floats over its edge (`over`), with no backdrop, scroll lock or focus trap, so the page stays usable while it is open.
 - **Card layout & standalone** — `type="card"` renders every panel as an always-visible card; a single `<hub-panel>` also works on its own, outside any container.
 - **Content header/footer slots** — `hubPanelHeader` and `hubPanelFooter` mark header/footer bands that render in every view (distinct from the `hubPanelHeading` nav label).
-- **Semantic alerts** — `appearance="alert"` with a `variant` turns a panel into a themed callout (`role="alert"`) driven by the design-system semantic tokens, no per-colour CSS.
+- **Semantic alerts** — `appearance="alert"` with a `variant` turns a panel into a themed callout driven by the design-system semantic tokens, no per-colour CSS. `danger` and `warning` callouts are `role="alert"` (announced at once); every other variant is `role="status"`, so a screen reader reads it without interrupting.
 - **Strip accent** — `<hub-panels variant>` recolours the navigation strip (active/hover tab, active pill, active accordion header) from a single semantic accent; built-in variants use the exact design-system tints and any custom accent is picked up automatically.
 - **Forms** — implements `ControlValueAccessor`; bind the active panel(s) to a `FormControl` or `ngModel` (single or `multiple`), with `bindValue` and `compareWith`.
 - **Routing** — a panel with a `routerLink` turns the content area into a `<router-outlet>` that follows the URL.

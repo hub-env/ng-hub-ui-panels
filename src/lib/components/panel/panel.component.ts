@@ -70,7 +70,7 @@ import { HUB_PANEL } from './panel.token';
 	host: {
 		class: 'hub-panels__panel',
 		'[attr.id]': 'accordionView() || cardView() ? null : id()',
-		'[attr.role]': "alertView() ? 'alert' : (accordionView() || cardView() ? null : 'tabpanel')",
+		'[attr.role]': "alertView() ? alertRole() : (accordionView() || cardView() ? null : 'tabpanel')",
 		'[attr.aria-labelledby]': "accordionView() || cardView() ? null : id() + '-link'",
 		'[attr.data-variant]': 'cardView() ? (variant() ?? null) : null',
 		'[style.--hub-panels-alert-accent]': 'alertAccent()',
@@ -237,6 +237,15 @@ export class HubPanelComponent implements OnDestroy {
 	 * strip / accordion views the alert appearance is ignored.
 	 */
 	protected readonly alertView = computed(() => this.appearance() === 'alert' && this.cardView());
+
+	/**
+	 * Only a `danger` or `warning` alert interrupts a screen reader (`role="alert"`, assertive).
+	 * Any other variant, or none, is advisory and waits its turn (`role="status"`, polite):
+	 * announcing an info note as urgent cuts off whatever the person was listening to.
+	 */
+	protected readonly alertRole = computed(() =>
+		this.variant() === 'danger' || this.variant() === 'warning' ? 'alert' : 'status'
+	);
 
 	/**
 	 * Inline accent fed to the alert styles, resolved from the `variant` input so

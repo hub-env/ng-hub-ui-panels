@@ -5,6 +5,16 @@ All notable changes to the ng-hub-ui-panels library will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [22.18.0] - 2026-10-19
+
+### Changed
+
+- **Only `danger` and `warning` alerts interrupt a screen reader.** An `appearance="alert"` panel
+  used to be `role="alert"` whatever its variant, so an info note or a success message cut off
+  whatever the person was listening to. `danger` and `warning` keep `role="alert"`; any other
+  variant, a custom one or none is now `role="status"`, which is read when the reader is free.
+  Nothing changes on screen.
+
 ## [22.17.1] - 2026-09-28
 
 ### Changed
