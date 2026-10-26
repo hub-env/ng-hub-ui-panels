@@ -14,7 +14,7 @@
 
 :where(.hub-panels__panel--card) {
 	--hub-panels-card-bg: var(--hub-sys-surface-page, #fff);
-	--hub-panels-card-color: var(--hub-sys-text-primary, #212529);
+	--hub-panels-card-color: var(--hub-sys-text-body, #212529);
 	--hub-panels-card-border-width: var(--hub-ref-border-width, 1px);
 	--hub-panels-card-border-style: solid;
 	--hub-panels-card-border-color: var(--hub-sys-border-color-default, #dee2e6);
@@ -35,7 +35,7 @@
 	// NOTE: `--hub-panels-panel-header-bg` is intentionally NOT declared here — see the
 	// card box-shadow note above; the default lives in the usage-site `var()` fallback
 	// so a region ancestor can re-tint the header/footer band via inheritance.
-	--hub-panels-panel-header-color: var(--hub-sys-text-primary, #212529);
+	--hub-panels-panel-header-color: var(--hub-sys-text-body, #212529);
 	--hub-panels-panel-header-padding-x: var(--hub-ref-space-4, 1.5rem);
 	--hub-panels-panel-header-padding-y: var(--hub-ref-space-3, 1rem);
 	--hub-panels-panel-header-font-weight: var(--hub-ref-font-weight-semibold, 600);
@@ -160,7 +160,7 @@
 
 :where(.hub-panels__panel--alert) {
 	--hub-panels-alert-bg: var(--hub-sys-surface-elevated, #f8f9fa);
-	--hub-panels-alert-color: var(--hub-sys-text-primary, #212529);
+	--hub-panels-alert-color: var(--hub-sys-text-body, #212529);
 	--hub-panels-alert-border-color: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-panels-alert-accent: var(--hub-sys-border-color-default, #dee2e6);
 	--hub-panels-alert-padding-x: var(--hub-ref-space-4, 1.5rem);
@@ -272,7 +272,7 @@ $hub-alert-variants: primary, secondary, success, danger, warning, info, neutral
 	// The neutral fallbacks here are the alert's only safety net: if a variant's
 	// design-system token is missing (tokens not loaded), the alert degrades to a
 	// neutral callout instead of an uncoloured one.
-	color: var(--hub-panels-alert-color, var(--hub-sys-text-primary, #212529));
+	color: var(--hub-panels-alert-color, var(--hub-sys-text-body, #212529));
 	background: var(--hub-panels-alert-bg, var(--hub-sys-surface-elevated, #f8f9fa));
 	border: var(--hub-ref-border-width, 1px) solid
 		var(--hub-panels-alert-border-color, var(--hub-sys-border-color-default, #dee2e6));

@@ -62,7 +62,7 @@ $slide:
 	margin-inline-start: #{$inset};
 	margin-inline-end: calc(-1 * (#{$width} + #{$inset}));
 	visibility: hidden;
-	color: var(--hub-side-panel-color, var(--hub-sys-text-primary, #212529));
+	color: var(--hub-side-panel-color, var(--hub-sys-text-body, #212529));
 	background: var(--hub-side-panel-bg, var(--hub-sys-surface-page, #fff));
 	border-inline-start: $border;
 	border-start-start-radius: #{$radius};

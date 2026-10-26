@@ -126,7 +126,7 @@ value inherited from above, so reading them this way is what lets you set them o
 | --- | --- |
 | `--hub-side-panel-width` | `24rem` (capped at the container's inline size) |
 | `--hub-side-panel-bg` | `var(--hub-sys-surface-page, #fff)` |
-| `--hub-side-panel-color` | `var(--hub-sys-text-primary, #212529)` |
+| `--hub-side-panel-color` | `var(--hub-sys-text-body, #212529)` |
 | `--hub-side-panel-border-width` | `var(--hub-ref-border-width, 1px)` |
 | `--hub-side-panel-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
 | `--hub-side-panel-border-radius` | `0` (the corners facing the content; the pair against the container edge rounds with `--hub-side-panel-inset`) |
@@ -178,14 +178,14 @@ Each token falls back to the matching `--hub-accordion-*` variable.
 
 | Variable | Default |
 | --- | --- |
-| `--hub-panels-accordion-color` | `var(--hub-accordion-color, var(--hub-sys-text-primary, #212529))` |
+| `--hub-panels-accordion-color` | `var(--hub-accordion-color, var(--hub-sys-text-body, #212529))` |
 | `--hub-panels-accordion-bg` | `var(--hub-accordion-bg, var(--hub-sys-surface-page, #fff))` |
 | `--hub-panels-accordion-border-width` | `var(--hub-accordion-border-width, var(--hub-ref-border-width, 1px))` |
 | `--hub-panels-accordion-border-color` | `var(--hub-accordion-border-color, var(--hub-sys-border-color-default, #dee2e6))` |
 | `--hub-panels-accordion-border-radius` | `var(--hub-accordion-border-radius, var(--hub-ref-radius-sm, 0.25rem))` |
 | `--hub-panels-accordion-btn-padding-x` | `var(--hub-accordion-btn-padding-x, 1.25rem)` |
 | `--hub-panels-accordion-btn-padding-y` | `var(--hub-accordion-btn-padding-y, var(--hub-ref-space-3, 1rem))` |
-| `--hub-panels-accordion-btn-color` | `var(--hub-accordion-btn-color, var(--hub-sys-text-primary, #212529))` |
+| `--hub-panels-accordion-btn-color` | `var(--hub-accordion-btn-color, var(--hub-sys-text-body, #212529))` |
 | `--hub-panels-accordion-btn-bg` | `var(--hub-accordion-btn-bg, var(--hub-sys-surface-page, #fff))` |
 | `--hub-panels-accordion-active-color` | `var(--hub-accordion-active-color, var(--hub-panels-accent-emphasis))` |
 | `--hub-panels-accordion-active-bg` | `var(--hub-accordion-active-bg, var(--hub-panels-accent-subtle))` |
@@ -211,7 +211,7 @@ is themable too — target `hub-panel { … }` when there is no `.hub-panels` an
 | Variable | Default |
 | --- | --- |
 | `--hub-panels-card-bg` | `var(--hub-sys-surface-page, #fff)` |
-| `--hub-panels-card-color` | `var(--hub-sys-text-primary, #212529)` |
+| `--hub-panels-card-color` | `var(--hub-sys-text-body, #212529)` |
 | `--hub-panels-card-border-width` | `var(--hub-ref-border-width, 1px)` |
 | `--hub-panels-card-border-color` | `var(--hub-sys-border-color-default, #dee2e6)` |
 | `--hub-panels-card-border-radius` | `var(--hub-ref-radius-md, 0.375rem)` |
@@ -223,7 +223,7 @@ is themable too — target `hub-panel { … }` when there is no `.hub-panels` an
 | `--hub-panels-body-gap` | `0` (gap between stacked body children in `fill` mode) |
 | `--hub-panels-card-gap` | `1rem` (between cards in the container) |
 | `--hub-panels-panel-header-bg` | `var(--hub-sys-surface-elevated, #f8f9fa)` |
-| `--hub-panels-panel-header-color` | `var(--hub-sys-text-primary, #212529)` |
+| `--hub-panels-panel-header-color` | `var(--hub-sys-text-body, #212529)` |
 | `--hub-panels-panel-header-padding-x` | `var(--hub-ref-space-4, 1.5rem)` |
 | `--hub-panels-panel-header-padding-y` | `var(--hub-ref-space-3, 1rem)` |
 | `--hub-panels-panel-header-font-weight` | `var(--hub-ref-font-weight-semibold, 600)` |

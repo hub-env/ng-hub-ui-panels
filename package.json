@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-panels",
-	"version": "22.18.0",
+	"version": "22.18.1",
 	"license": "MIT",
 	"description": "A versatile, accessible content-panels container for Angular with four visualizations (tabs, pills, accordion, card), standalone cards, content header/footer slots, routing, reactive forms and keyboard navigation. Part of the ng-hub-ui family.",
 	"author": "Carlos Morcillo Fern\u00e1ndez <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
@@ -32,7 +32,7 @@
 		"@angular/core": ">=17.3.0",
 		"@angular/forms": ">=17.3.0",
 		"@angular/router": ">=17.3.0",
-		"ng-hub-ui-ds": ">=22.0.0",
+		"ng-hub-ui-ds": ">=22.14.1",
 		"ng-hub-ui-utils": ">=22.7.0"
 	},
 	"peerDependenciesMeta": {

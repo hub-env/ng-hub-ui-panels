@@ -60,7 +60,7 @@
 	--hub-panels-forward-btn-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23212529' d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
 	--hub-panels-nav-link-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-panels-nav-link-padding-y: var(--hub-ref-space-2, 0.5rem);
-	--hub-panels-nav-link-color: var(--hub-sys-text-primary, #212529);
+	--hub-panels-nav-link-color: var(--hub-sys-text-body, #212529);
 	--hub-panels-nav-link-hover-color: var(--hub-panels-accent-emphasis);
 	--hub-panels-nav-link-active-color: var(--hub-panels-accent);
 	--hub-panels-nav-link-active-bg: var(--hub-panels-content-bg);
@@ -133,7 +133,7 @@
 	--hub-panels-card-gap: var(--hub-ref-space-3, 1rem);
 
 	// Accordion view (compatible with the --hub-accordion-* contract)
-	--hub-panels-accordion-color: var(--hub-accordion-color, var(--hub-sys-text-primary, #212529));
+	--hub-panels-accordion-color: var(--hub-accordion-color, var(--hub-sys-text-body, #212529));
 	--hub-panels-accordion-bg: var(--hub-accordion-bg, var(--hub-sys-surface-page, #fff));
 	--hub-panels-accordion-border-width: var(--hub-accordion-border-width, var(--hub-ref-border-width, 1px));
 	--hub-panels-accordion-border-color: var(--hub-accordion-border-color, var(--hub-sys-border-color-default, #dee2e6));
@@ -144,7 +144,7 @@
 	);
 	--hub-panels-accordion-btn-padding-x: var(--hub-accordion-btn-padding-x, 1.25rem);
 	--hub-panels-accordion-btn-padding-y: var(--hub-accordion-btn-padding-y, var(--hub-ref-space-3, 1rem));
-	--hub-panels-accordion-btn-color: var(--hub-accordion-btn-color, var(--hub-sys-text-primary, #212529));
+	--hub-panels-accordion-btn-color: var(--hub-accordion-btn-color, var(--hub-sys-text-body, #212529));
 	--hub-panels-accordion-btn-bg: var(--hub-accordion-btn-bg, var(--hub-sys-surface-page, #fff));
 	--hub-panels-accordion-active-color: var(--hub-accordion-active-color, var(--hub-panels-accent-emphasis));
 	--hub-panels-accordion-active-bg: var(--hub-accordion-active-bg, var(--hub-panels-accent-subtle));

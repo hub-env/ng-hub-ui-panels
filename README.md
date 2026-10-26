@@ -142,7 +142,7 @@ npm install ng-hub-ui-panels
 	"@angular/core": ">=17.3.0",
 	"@angular/forms": ">=17.3.0",
 	"@angular/router": ">=17.3.0",
-	"ng-hub-ui-ds": ">=22.0.0",
+	"ng-hub-ui-ds": ">=22.14.1",
 	"ng-hub-ui-utils": ">=22.7.0"
 }
 ```

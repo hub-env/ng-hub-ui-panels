@@ -42,7 +42,7 @@ const THEME: Record<string, string> = {
 	'--hub-sys-color-ink': '#212529',
 	'--hub-sys-surface-page': '#ffffff',
 	'--hub-sys-surface-elevated': '#f8f9fa',
-	'--hub-sys-text-primary': '#212529'
+	'--hub-sys-text-body': '#212529'
 };
 
 /** One compiled rule: the selector it matched on and the declarations it carries. */
